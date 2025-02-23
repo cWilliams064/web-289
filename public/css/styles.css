@@ -9,7 +9,7 @@
 }
 
 html {
-  font: 16px Raleway, Arial, sans-serif;
+  font: 17px Raleway, Arial, sans-serif;
 }
 
 body {
@@ -45,7 +45,7 @@ header > section {
 }
 
 header > section input {
-  border: none;
+  border: 1px solid #808080;
   border-radius: 20px;
   height: 30px;
   padding: 0 10px;
@@ -122,6 +122,11 @@ main img {
   max-width: 100%;
 }
 
+#wrapper a:hover,
+#wrapper #home-page > section:first-of-type a:hover {
+  color: #cc2e72;
+}
+
 #home-page > section:first-of-type {
   display: grid;
   grid-template-columns: 1fr;
@@ -169,6 +174,7 @@ main img {
 }
 
 #popular-categories {
+  column-gap: 20px;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: .5fr 2fr;
@@ -182,8 +188,6 @@ main img {
 }
 
 #popular-categories section {
-  border: 1px solid #808080;
-  border-radius: 20px;
   display: grid;
   grid-template-columns: 1fr;
   grid-template-rows: .5fr;
@@ -192,12 +196,14 @@ main img {
 #popular-categories section a {
   align-self: flex-end;
   background-color: #fff;
+  border: 1px solid #808080;
   border-radius: 20px 20px 0 0;
   color: #0d5f6a;
   grid-column: 1;
   grid-row: 1;
-  margin: 0 3rem;
+  justify-self: center;
   text-align: center;
+  width: 170px;
   z-index: 2;
 }
 
@@ -209,45 +215,35 @@ main img {
 #home-page > section:last-of-type {
   display: grid;
   grid-template-columns: 1fr .75fr;
-  grid-template-rows: .75fr;
-  margin: -2rem 0;
+  padding: 3rem 0;
 }
 
 #home-page article {
+  padding-right: 4rem;
+}
+
+#home-page > section:last-of-type img {
   align-self: center;
-  padding-right: 30px
-}
-
-#home-page article p {
-  font-size: 18px;
-}
-
-#home-page > section:last-child img {
-  justify-self: center;
-  margin-top: 20px;
-}
-
-#home-page > section:last-of-type, 
-#popular-categories {
-  padding: 0 4rem;
 }
 
 #about-page {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  grid-template-rows: .5fr repeat(2, 2fr);
+  grid-template-rows: .25fr .75fr 1fr;
+  margin: 2rem 4rem;
 }
 
 #about-page h1 {
+  border-bottom: 3px solid #0d5f6a;
   grid-column: 1;
   grid-row: 1;
-  margin-bottom: 0;
+  margin-top: 0;
+  width: 150px;
 }
 
 #about-page section:first-of-type {
   grid-column: 1;
   grid-row: 2;
-  margin-bottom: -2rem;
 }
 
 #about-page section:last-of-type {
@@ -258,8 +254,17 @@ main img {
 #about-page img {
   grid-column: 2;
   grid-row: -1/1;
-  align-self: flex-end;
+  justify-self: right;
   max-height: 500px;
+}
+
+#about-page a {
+  color: #0d5f6a;
+}
+
+#home-page > section:last-of-type,
+#popular-categories {
+  margin: 0 4rem;
 }
 
 /*** Footer ***/

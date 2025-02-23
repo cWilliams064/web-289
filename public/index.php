@@ -25,7 +25,6 @@
       </section>
       <img src="assets/logo.png" width="500" height="500" alt="Pink and navy cupcake logo for Grandma's Pantry.">
     </header>
-    <!--
     <div id="sidebar">
         <span id="closeSidebar">&times;</span>
         <h2>Login</h2>
@@ -41,7 +40,6 @@
         <a href="sign-up.php">Sign Up</a>
     </div>
     <div id="overlay"></div>
-    -->
     <div id="wrapper">
       <main role="main" id="home-page">
         <section>
