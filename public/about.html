@@ -3,6 +3,7 @@
   <head>
     <meta charset="utf-8">
     <title>Grandma's Pantry</title>
+    <script src="js/app.js" defer></script>
     <link href=favicon.ico rel="icon">
     <link href="css/styles.css" rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,8 +16,8 @@
           <li><a href="index.php">Home</a></li>
           <li><a href="#">Recipes</a></li>
           <li><a href="about.html">About Us</a></li>
-          <li><a href="#" id="sidebar-opener">Log In</a></li>
-          <li><a href="#"><img src="assets/login-image.png" width="27" height="27" alt="User icon that links to login."></a></li>
+          <li><a href="#" id="open-sidebar">Log In</a></li>
+          <li><a href="#" id="open-sidebar-icon"><img src="assets/login-image.png" width="27" height="27" alt="User icon that links to login."></a></li>
         </ul>
       </nav>
       <section>
@@ -25,24 +26,21 @@
       </section>
       <img src="assets/logo.png" width="500" height="500" alt="Pink and navy cupcake logo for Grandma's Pantry.">
     </header>
-    <!--
-    <div id="sidebar">
-        <span id="closeSidebar">&times;</span>
+
+    <div id="wrapper">
+      <div id="sidebar">
+        <button id="close-sidebar" aria-label="Close Sidebar"><img src="assets/icons/x-icon.svg" width="14" height="14" alt="A X icon."></button>
+
         <h2>Login</h2>
         <form>
-            <label for="username">Username:</label><br>
-            <input type="text" id="username" name="username" required><br>
-
-            <label for="password">Password:</label><br>
-            <input type="password" id="password" name="password" required><br>
-
-            <button type="submit">Login</button>
+          <label for="username">Username:</label><br>
+          <input type="text" id="username" name="username" required><br>
+          <label for="password">Password:</label><br>
+          <input type="password" id="password" name="password" required><br>
+          <button type="submit">Login</button>
         </form>
         <a href="sign-up.php">Sign Up</a>
-    </div>
-    <div id="overlay"></div>
-    -->
-    <div id="wrapper">
+      </div>
       <main role="main" id="about-page">
         <h1>About Us</h1>
         <section>
@@ -68,7 +66,7 @@
         </nav>
         <section>
           <img src="assets/icons/instagram.png" width="31" height="31" alt="The social media Instagram logo.">
-          <img src="assets/icons/x.png" width="31" height="31" alt="The social media X logo">
+          <img src="assets/icons/x-social-media.png" width="31" height="31" alt="The social media X logo">
           <img src="assets/icons/facebook.png" width="31" height="31" alt="The social media Facebook logo.">
         </section>
     </footer>

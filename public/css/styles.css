@@ -15,12 +15,15 @@ html {
 body {
   background-color: #dfa4b6;
   margin: 0;
+  overflow-x: hidden;
 }
 
 #wrapper {
   background-color: #fff;
-  margin: auto;
+  display: flex;
+  justify-self: center;
   padding: 4rem 2rem 1rem 2rem;
+  position: relative;
   width: 80%;
 }
 
@@ -33,6 +36,7 @@ header {
   grid-template-rows: 1fr;
   padding: 25px 45px;
   position: relative;
+  z-index: 4;
 }
 
 header > section {
@@ -86,7 +90,6 @@ nav ul > section {
 }
 
 nav a {
-  color: #fff;
   text-decoration: none;
 }
 
@@ -104,6 +107,11 @@ nav li img {
   width: 20px;
 }
 
+nav a,
+nav label {
+  color: #fff;
+}
+
 header > section,
 nav ul {
   justify-content: center;
@@ -115,7 +123,69 @@ footer {
   align-items: center;
 }
 
-/*** Main ***/
+/*** Side Bar ***/
+
+#sidebar {
+  background-color: #0f717e;
+  border: 1px solid #808080;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 40px;
+  position: absolute;
+  right: -100%;
+  top: 0;
+  transition: right 0.4s ease-in-out;
+  width: 300px;
+  z-index: 3;
+}
+
+#sidebar.active {
+  right: -12.5%;
+}
+
+#sidebar > button {
+  align-self: flex-end;
+  padding: 4px 0 0 0;
+  width: 30px;
+}
+
+#sidebar h2 {
+  margin-bottom: 45px;
+}
+
+#sidebar form input {
+  border: 1px solid #808080;
+  border-radius: 10px;
+  height: 35px;
+  margin: 10px 0 2rem 0;
+  padding: 10px;
+  width: 100%;
+}
+
+#sidebar form button {
+  background-color: #cc2e72;
+  border: 1px solid #808080;
+  border-radius: 10px;
+  color: #fff;
+  font-size: 17px;
+  padding: 10px 30px;
+}
+
+#sidebar form button:hover {
+  background-color: #811c48;
+}
+
+#sidebar > a {
+  margin-top: 50px;
+}
+
+#sidebar h2,
+#sidebar label {
+  color: #fff;
+}
+
+/*** Home Page ***/
 
 main img {
   height: auto;
@@ -226,7 +296,10 @@ main img {
   align-self: center;
 }
 
+/*** About Page ***/
+
 #about-page {
+  column-gap: 2rem;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   grid-template-rows: .25fr .75fr 1fr;
@@ -260,6 +333,11 @@ main img {
 
 #about-page a {
   color: #0d5f6a;
+}
+
+#home-page > section:first-of-type a,
+#sidebar > a {
+  color: #fff;
 }
 
 #home-page > section:last-of-type,
