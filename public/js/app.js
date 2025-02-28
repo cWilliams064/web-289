@@ -6,7 +6,8 @@ const openSidebarLinks = document.querySelectorAll('#open-sidebar, #open-sidebar
 const sidebar = document.getElementById('sidebar');
 const closeSidebarButton = document.getElementById('close-sidebar');
 
-function openSidebar() {
+function openSidebar(e) {
+  e.preventDefault();
   sidebar.classList.add('active');
 }
 

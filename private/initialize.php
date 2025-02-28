@@ -13,6 +13,8 @@
   require_once('db-credentials.php');
   require_once('db-functions.php');
   require_once('functions.php');
+  require_once('status-error-functions.php');
+  require_once('validation-functions.php');
   
   function my_autoload($class) {
     if(preg_match('/\A\w+\Z/', $class)) {
@@ -24,3 +26,6 @@
 
   $database = db_connect();
   DatabaseObject::set_database($database);
+
+  $session = new Session;
+  

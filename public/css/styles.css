@@ -154,7 +154,7 @@ footer {
   margin-bottom: 45px;
 }
 
-#sidebar form input {
+#sidebar form input:not(:last-of-type) {
   border: 1px solid #808080;
   border-radius: 10px;
   height: 35px;
@@ -163,7 +163,7 @@ footer {
   width: 100%;
 }
 
-#sidebar form button {
+#sidebar form input:last-of-type {
   background-color: #cc2e72;
   border: 1px solid #808080;
   border-radius: 10px;
@@ -296,6 +296,10 @@ main img {
   align-self: center;
 }
 
+/*** Recipes Page ***/
+
+
+
 /*** About Page ***/
 
 #about-page {
@@ -343,6 +347,24 @@ main img {
 #home-page > section:last-of-type,
 #popular-categories {
   margin: 0 4rem;
+}
+
+/*** Sign Up Page ***/
+#signup-page {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+#signup-page label::after {
+  content: " *";
+  color: #ff0000;
+  font-size: 20px;
+}
+
+#signup-page h1,
+#signup-page form {
+  align-self: center;
 }
 
 /*** Footer ***/

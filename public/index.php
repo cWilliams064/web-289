@@ -30,19 +30,7 @@
     </header>
 
     <div id="wrapper">
-      <div id="sidebar">
-        <button id="close-sidebar" aria-label="Close Sidebar"><img src="assets/icons/x-icon.svg" width="14" height="14" alt="A X icon."></button>
-
-        <h2>Login</h2>
-        <form>
-          <label for="username">Username:</label><br>
-          <input type="text" id="username" name="username" required><br>
-          <label for="password">Password:</label><br>
-          <input type="password" id="password" name="password" required><br>
-          <button type="submit">Login</button>
-        </form>
-        <a href="sign-up.php">Sign Up</a>
-      </div>
+      <?php include(PUBLIC_PATH . "/login.php") ?>
       <main role="main" id="home-page">
         <section>
           <section>
