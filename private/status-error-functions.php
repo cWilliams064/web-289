@@ -2,9 +2,9 @@
 
 function require_login() {
   global $session;
-  
+
   if(!$session->is_logged_in()) {
-    redirect_to(url_for('/login.php'));
+    redirect_to(url_for('/index.php'));
   }
   else {
   
@@ -13,31 +13,32 @@ function require_login() {
 
 function require_admin() {
   global $session;
-  
+
   if(!$session->is_admin()) {
     redirect_to(url_for('/index.php'));
   }
   else {
-  
+
   }
 }
 
 function require_super_admin() {
   global $session;
-  
+
   if(!$session->is_super_admin()) {
     redirect_to(url_for('/index.php'));
   }
   else {
-  
+
   }
 }
+
 
 function display_errors($errors=array()) {
   $output = '';
   if(!empty($errors)) {
-    $output .= "<div class=\"errors\">";
-    $output .= "Please fix the following errors:";
+    $output .= "<div id=\"errors\">";
+    $output .= "<p>Please fix the following errors:<p>";
     $output .= "<ul>";
     foreach($errors as $error) {
       $output .= "<li>" . h($error) . "</li>";

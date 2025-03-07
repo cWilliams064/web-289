@@ -20,19 +20,47 @@ class Session {
       $this->username = $_SESSION['username'] = $user->username;
       $this->lastLogin = $_SESSION['lastLogin'] = time();
     }
+
     return true;
   }
 
   public function is_logged_in() {
     return isset($this->userId) && $this->last_login_is_recent(); 
   }
-
+  
   public function is_admin() {
-    if (!$this->is_logged_in()) {
-      return false;
+    $roleId = User::get_role_id($this->userId);
+    
+    if ($roleId !== false) {
+        settype($roleId, 'int');
+        return $roleId === 2;
     }
-    $current_user = User::find_by_id($this->userId);
-    return $current_user && $current_user->roleLevel === 2;
+
+    return false;
+  }
+
+  public function is_super_admin() {
+    $roleId = User::get_role_id($this->userId);
+    
+    if ($roleId !== false) {
+        settype($roleId, 'int');
+        return $roleId === 3;
+    }
+
+    return false;
+  }
+
+
+  public function get_last_login() {
+    return $this->lastLogin;
+  }
+
+  public function get_user() {
+    return User::find_by_id($this->userId);
+  }
+
+  private function get_role_id($userId) {
+    return DatabaseObject::get_role_id($userId);
   }
 
   public function logout() {

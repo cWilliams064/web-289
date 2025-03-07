@@ -1,4 +1,4 @@
-<?php require_once('../private/initialize.php'); ?>
+<?php require_once(dirname(__DIR__) . '/private/initialize.php'); ?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -17,9 +17,9 @@
         <ul>
           <li><a href="index.php">Home</a></li>
           <li><a href="#">Recipes</a></li>
-          <li><a href="about.html">About Us</a></li>
+          <li><a href="about.php">About Us</a></li>
           <li><a href="#" id="open-sidebar">Log In</a></li>
-          <li><a href="#" id="open-sidebar-icon"><img src="assets/login-image.png" width="27" height="27" alt="User icon that links to login."></a></li>
+          <li><a href="#" id="open-sidebar-icon"><img src="../public/assets/login-image.png" width="27" height="27" alt="User icon that links to login."></a></li>
         </ul>
       </nav>
       <section>
@@ -30,7 +30,15 @@
     </header>
 
     <div id="wrapper">
-      <?php include(PUBLIC_PATH . "/login.php") ?>
+      <?php 
+      if($session->is_logged_in()) {
+        include("./logged-in.php");
+      }
+        
+      if(!$session->is_logged_in()) {
+        include("./login.php");
+      }
+      ?>
       <main role="main" id="home-page">
         <section>
           <section>

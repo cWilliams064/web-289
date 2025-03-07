@@ -23,19 +23,22 @@ class DatabaseObject {
       exit("Database query failed.");
     }
     
-    $object_array = [];
+    $obj_array = [];
     while($record = $result->fetch_assoc()) {
-      $object_array[] = static::instantiate($record);
+      $obj_array[] = static::instantiate($record);
     }
     $result->free();
     
-    return $object_array;
+    return $obj_array;
   }
 
   static public function find_by_id($id) {
+    $primary_key_column = rtrim(static::$table_name, 's') . '_id';
+
     $sql = "SELECT * FROM " . static::$table_name;
-    $sql .= " WHERE id='" . self::$database->escape_string($id) . "'";
+    $sql .= " WHERE " . $primary_key_column . "='" . self::$database->escape_string($id) . "'";
     $obj_array = static::find_by_sql($sql);
+    
     if(!empty($obj_array)) {
       return array_shift($obj_array);
     }
@@ -44,12 +47,32 @@ class DatabaseObject {
     }
   }
 
+  static public function get_role_id($id) {
+    $sql = "SELECT role_id FROM users";
+    $sql .= " WHERE user_id = '" . self::$database->escape_string($id) . "'";
+    $result = self::$database->query($sql);
+
+    if ($result) {
+      $row = $result->fetch_assoc();
+      if ($row) {
+          settype($row['role_id'], 'int');
+          return $row['role_id'];
+      }
+    }
+    return false;
+  }
+
   static protected function instantiate($record) {
     $object = new static;
 
+    if (isset($record['user_id'])) {
+      $object->id = $record['user_id'];
+    }
+
     foreach($record as $property => $value) {
       $camelCaseProperty = lcfirst(str_replace('_', '', ucwords($property, '_')));
-      if(property_exists($object, $camelCaseProperty)) {
+
+      if(property_exists($object, $camelCaseProperty) && $property !== 'user_id') {
         $object->$camelCaseProperty = $value;
       }
     }
@@ -85,9 +108,11 @@ class DatabaseObject {
 
     $attributes = $this->sanitized_attributes();
     $attribute_pairs = [];
+
     foreach($attributes as $key => $value) {
       $attribute_pairs[] = "{$key}='{$value}'";
     }
+
     $sql = "UPDATE " . static::$table_name . " SET ";
     $sql .= join(', ', $attribute_pairs);
     $sql .= " WHERE id='" . self::$database->escape_string($this->id) . "'";
@@ -115,10 +140,20 @@ class DatabaseObject {
 
   public function attributes() {
     $attributes = [];
-    foreach(static::$db_columns as $column) {
-      if ($column === 'id') { continue; }
-      $attributes[$column] = $this->$column;
+
+    foreach(static::$db_columns as $index => $column) {
+
+      if ($index === 0) {
+        continue;
+      }
+
+      $camelCaseProperty = lcfirst(str_replace(' ', '', ucwords(str_replace('_', ' ', $column))));
+
+      if (property_exists($this, $camelCaseProperty)) {
+        $attributes[$column] = $this->$camelCaseProperty;
+      }
     }
+
     return $attributes;
   }
 

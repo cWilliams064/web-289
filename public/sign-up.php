@@ -41,7 +41,7 @@ else {
         <ul>
           <li><a href="index.php">Home</a></li>
           <li><a href="#">Recipes</a></li>
-          <li><a href="about.html">About Us</a></li>
+          <li><a href="about.php">About Us</a></li>
           <li><a href="#" id="open-sidebar">Log In</a></li>
           <li><a href="#" id="open-sidebar-icon"><img src="assets/login-image.png" width="27" height="27" alt="User icon that links to login."></a></li>
         </ul>
@@ -54,15 +54,24 @@ else {
     </header>
 
     <div id="wrapper">
-      <?php include(PUBLIC_PATH . "/login.php") ?>
+      <?php 
+        if($session->is_logged_in()) {
+          include("./logged-in.php");
+        }
+        include("./login.php");
+      ?>
       <main role="main" id="signup-page">
         <h1>Sign Up</h1>
 
         <?php echo display_errors($user->errors); ?>
 
-        <form action="sign-up.php" method="post">
+        <form action="sign-up.php" method="post" enctype="multipart/form-data">
+          <section>
+            <p>*</p>
+            <p>= required</p>
+          </section>
           <?php include('users/form-fields.php') ?>
-          <input type="submit" value="Sign up">
+          <input type="submit" id="signup-submit" value="Create Account">
         </form>
         <p>Already have an account? <a href="login.php">Log in</a></p>
       </main>

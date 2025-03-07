@@ -3,20 +3,19 @@
 class User extends DatabaseObject {
   
   static protected $table_name = 'users';
-  static protected $db_columns = ['user_id', 'first_name', 'last_name', 'username', 'email', 'profile_img', 'hash_password', 'role_id', 'created_at', 'active'];
+  static protected $db_columns = ['user_id', 'first_name', 'last_name', 'username', 'email', 'hashed_password', 'role_id', 'created_at', 'activity'];
 
   public $id;
   public $firstName;
   public $lastName;
   public $username;
-  public $profileImage;
   public $email;
-  protected $hashedPassword;
-  public $roleLevel;
-  public $createdTimestamp;
+  public $roleId;
+  public $createdAt;
   public $activity;
   public $password;
   public $confirmPassword;
+  protected $hashedPassword;
   protected $passwordRequired = true;
 
   public const USER_LEVEL_OPTIONS = [
@@ -26,10 +25,10 @@ class User extends DatabaseObject {
   ];
 
   public function role_level() {
-    if($this->roleLevel === 2 || $this->roleLevel === 3) {
-      return self::USER_LEVEL_OPTIONS[$this->roleLevel];
-    }
-    else {
+    settype($this->roleId, 'int');
+    if ($this->roleId === 1 || $this->roleId === 2 || $this->roleId === 3) {
+      return self::USER_LEVEL_OPTIONS[$this->roleId];
+    } else {
       return "Unknown";
     }
   }
@@ -40,17 +39,17 @@ class User extends DatabaseObject {
     $this->lastName = $args['last_name'] ?? '';
     $this->username = $args['username'] ?? '';
     $this->email = $args['email'] ?? '';
-    $this->profileImage = $args['profile_img'] ?? '/assets/default-profile.png';
-    $this->roleLevel = $args['role_id'] ?? 1;
-    $this->createdTimestamp = $args['created_at'] ?? '';
-    $this->activity = $args['activity'] ?? '';
+    $this->roleId = $args['role_id'] ?? 1;
+    $this->createdAt = $args['created_at'] ?? '';
+    $this->activity = $args['activity'] ?? 1;
     $this->password = $args['password'] ?? '';
     $this->confirmPassword = $args['confirm_password'] ?? '';
   }
 
-  public function fullName() {
+  public function full_name() {
     return "{$this->firstName} {$this->lastName}";
   }
+
 
   protected function set_hashed_password() {
     $this->hashedPassword = password_hash($this->password, PASSWORD_BCRYPT);
@@ -62,6 +61,9 @@ class User extends DatabaseObject {
 
   protected function create() {
     $this->set_hashed_password();
+    $this->createdAt = date('Y-m-d H:i:s');
+    $this->check_activity_status();
+    
     return parent::create();
   }
 
@@ -72,8 +74,31 @@ class User extends DatabaseObject {
     else {
       $this->passwordRequired = false;
     }
+
+    $this->check_activity_status();
     return parent::update();
   }
+
+  public function check_activity_status() {
+    global $session;
+    $lastLogin = $session->get_last_login();
+    if ($lastLogin && strtotime($lastLogin) < strtotime('-30 days')) {
+        $this->activity = 0;
+    }
+  }
+
+  static public function find_by_username($username) {
+    $sql = "SELECT * FROM " . static::$table_name;
+    $sql .= " WHERE username='" . self::$database->escape_string($username) . "'";
+    $obj_array = static::find_by_sql($sql);
+
+    if(!empty($obj_array)) {
+      return array_shift($obj_array);
+    }
+    else {
+      return false;
+    }
+  } 
 
   protected function validate() {
     $this->errors = [];
@@ -109,7 +134,7 @@ class User extends DatabaseObject {
     if($this->passwordRequired) {
       if(is_blank($this->password)) {
         $this->errors[] = "Password cannot be blank.";
-      } elseif (!has_length($this->password, array('min' => 12))) {
+      } elseif (!has_length($this->password, array('min' => 8))) {
         $this->errors[] = "Password must contain 12 or more characters";
       } elseif (!preg_match('/[A-Z]/', $this->password)) {
         $this->errors[] = "Password must contain at least 1 uppercase letter";
@@ -131,15 +156,4 @@ class User extends DatabaseObject {
     return $this->errors;
   }  
 
-  static public function find_by_username($username) {
-    $sql = "SELECT * FROM " . static::$table_name;
-    $sql .= " WHERE username='" . self::$database->escape_string($username) . "'";
-    $obj_array = static::find_by_sql($sql);
-    if(!empty($obj_array)) {
-      return array_shift($obj_array);
-    }
-    else {
-      return false;
-    }
-  } 
 }

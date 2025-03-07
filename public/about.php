@@ -1,3 +1,5 @@
+<?php require_once('../private/initialize.php'); ?>
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -15,7 +17,7 @@
         <ul>
           <li><a href="index.php">Home</a></li>
           <li><a href="#">Recipes</a></li>
-          <li><a href="about.html">About Us</a></li>
+          <li><a href="about.php">About Us</a></li>
           <li><a href="#" id="open-sidebar">Log In</a></li>
           <li><a href="#" id="open-sidebar-icon"><img src="assets/login-image.png" width="27" height="27" alt="User icon that links to login."></a></li>
         </ul>
@@ -28,19 +30,15 @@
     </header>
 
     <div id="wrapper">
-      <div id="sidebar">
-        <button id="close-sidebar" aria-label="Close Sidebar"><img src="assets/icons/x-icon.svg" width="14" height="14" alt="A X icon."></button>
-
-        <h2>Login</h2>
-        <form>
-          <label for="username">Username:</label><br>
-          <input type="text" id="username" name="username" required><br>
-          <label for="password">Password:</label><br>
-          <input type="password" id="password" name="password" required><br>
-          <button type="submit">Login</button>
-        </form>
-        <a href="sign-up.php">Sign Up</a>
-      </div>
+      <?php 
+      if($session->is_logged_in()) {
+        include("./logged-in.php");
+      }
+        
+      if(!$session->is_logged_in()) {
+        include("./login.php");
+      }
+      ?>
       <main role="main" id="about-page">
         <h1>About Us</h1>
         <section>

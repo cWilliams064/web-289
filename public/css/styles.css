@@ -62,12 +62,12 @@ header > section img {
 }
 
 header > img:last-of-type {
+  height: auto;
+  left: 50%;
   position: absolute;
   top: 85%;
-  left: 50%;
-  width: 250px;
   transform: translate(-50%, -50%);
-  height: auto;
+  width: 250px;
 }
 
 nav {
@@ -128,8 +128,6 @@ footer {
 #sidebar {
   background-color: #0f717e;
   border: 1px solid #808080;
-  display: flex;
-  flex-direction: column;
   height: 100%;
   padding: 40px;
   position: absolute;
@@ -144,17 +142,21 @@ footer {
   right: -12.5%;
 }
 
-#sidebar > button {
+#close-sidebar {
   align-self: flex-end;
   padding: 4px 0 0 0;
   width: 30px;
 }
 
-#sidebar h2 {
+#sidebar #login h2 {
   margin-bottom: 45px;
 }
 
-#sidebar form input:not(:last-of-type) {
+#user-login {
+  font-size: 20px;
+}
+
+#sidebar #login form input:not(:last-of-type) {
   border: 1px solid #808080;
   border-radius: 10px;
   height: 35px;
@@ -163,7 +165,8 @@ footer {
   width: 100%;
 }
 
-#sidebar form input:last-of-type {
+#login input:last-of-type,
+#logged-in a:first-of-type {
   background-color: #cc2e72;
   border: 1px solid #808080;
   border-radius: 10px;
@@ -172,17 +175,59 @@ footer {
   padding: 10px 30px;
 }
 
-#sidebar form button:hover {
-  background-color: #811c48;
-}
-
-#sidebar > a {
+#sidebar #login a {
   margin-top: 50px;
 }
 
-#sidebar h2,
-#sidebar label {
+#logged-in section {
+  margin: 15px 0 40px 0;
+}
+
+#logged-in section p {
+  border-bottom: 1px solid #fff;
+  border-top: 1px solid #fff;
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 20px 0;
+}
+
+#logged-in section p:last-of-type {
+  border-top: none;
+}
+
+#logged-in a {
+  margin-bottom: 20px;
+}
+
+#logged-in a:first-of-type {
+  margin-bottom: 30px;
+  text-decoration: none;
+  width: 120px;
+}
+
+#logged-in a:first-of-type:hover {
   color: #fff;
+}
+
+#login,
+#logged-in {
+  display: flex;
+  flex-direction: column;
+}
+
+#login h2,
+#login label,
+#logged-in h2,
+#logged-in p {
+  color: #fff;
+}
+
+#login form input:last-of-type:hover,
+#logged-in a:first-of-type:hover,
+#signup-page #signup-submit:hover,
+#create-user input[type=submit]:hover {
+  background-color: #a41150;
 }
 
 /*** Home Page ***/
@@ -193,8 +238,8 @@ main img {
 }
 
 #wrapper a:hover,
-#wrapper #home-page > section:first-of-type a:hover {
-  color: #cc2e72;
+#wrapper main > section:first-of-type a:hover {
+  color: #ff2f89;
 }
 
 #home-page > section:first-of-type {
@@ -298,8 +343,6 @@ main img {
 
 /*** Recipes Page ***/
 
-
-
 /*** About Page ***/
 
 #about-page {
@@ -340,7 +383,7 @@ main img {
 }
 
 #home-page > section:first-of-type a,
-#sidebar > a {
+#sidebar a {
   color: #fff;
 }
 
@@ -349,22 +392,116 @@ main img {
   margin: 0 4rem;
 }
 
-/*** Sign Up Page ***/
+/*** Sign Up Page and Create User Page ***/
 #signup-page {
   display: flex;
   flex-direction: column;
   width: 100%;
 }
 
-#signup-page label::after {
-  content: " *";
-  color: #ff0000;
-  font-size: 20px;
+#login #errors {
+  color: #fff;
+  margin: -20px 0 10px 0;
+}
+
+#login #errors p {
+  margin-top: 0;
+}
+
+form > section {
+  display: flex;
+  margin-bottom: 30px;
+}
+
+form > section p:first-of-type {
+  font-size: 25px;
+  margin: 19px 5px 0 0;
+}
+
+#signup-page form {
+  display: flex;
+  flex-direction: column;
+}
+
+#signup-page input {
+  font-size: 14px;
+  height: 35px;
+  margin: -5px 0 20px 0;
+  padding-left: 6px;
+  width: 350px;
+}
+
+#signup-page #signup-submit {
+  align-self: center;
+  display: flex;
+  margin: 10px 0;
+  width: 200px;
+}
+
+#signup-page > p {
+  margin: 30px 0 50px 0;
+  text-align: center;
+}
+
+#signup-page a {
+  color: #0d5f6a;
+}
+
+#create-user h1 {
+  margin-top: 2.5rem;
+}
+
+#create-user form input {
+  margin-bottom: 20px;
+}
+
+#create-user input[type=submit] {
+  margin-top: 1rem;
+  padding: 5px 20px;
 }
 
 #signup-page h1,
 #signup-page form {
   align-self: center;
+}
+
+#signup-page input[type=text],
+#signup-page input[type=password] {
+  background-color: #f4f4f4;
+  border: 1px solid #000;
+  border-radius: 10px;
+}
+
+form span,
+form > section p:first-of-type {
+  color: #ff0000;
+  font-weight: bold;
+}
+
+#signup-page #signup-submit, 
+#create-user input[type=submit] {
+  background-color: #0d5f6a;
+  border: 1px solid #808080;
+  border-radius: 5px;
+  color: #fff;
+}
+
+/*** Manage Pages ***/
+
+#manage-users a {
+  color: #0d5f6a;
+}
+
+#manage-users table {
+  border: 1px solid #000;
+  border-collapse: collapse;
+  margin-top: 35px;
+}
+
+#manage-users td, th {
+  border: 1px solid black;
+  padding:  5px;
+  text-align: center;
 }
 
 /*** Footer ***/
