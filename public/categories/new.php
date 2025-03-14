@@ -1,25 +1,30 @@
 <?php 
 
 require_once('../../private/initialize.php');
-
 require_admin_or_super_admin();
 
 if(is_post_request()) {
-  $args = $_POST['user'];
-  $user = new User($args);
-  $errors = $user->validate();
-  $result = $user->save();
+  $args = $_POST['category'];
+  $category = new Category($_POST['category']);
+
+  if (isset($args['category_type']) && in_array($args['category_type'], ['meal', 'ethnic', 'diet'])) {
+    $category->category_type = $args['category_type'];
+  }
+
+  $errors = $category->validate_category();
+  $result = $category->save();
 
   if($result === true) {
-    $new_id = $user->id;
-    redirect_to(url_for('../public/users/index.php'));
+    $new_id = $category->id;
+    $session->message('The Category was created successfully.');
+    redirect_to(url_for('../public/categories/index.php'));
   } 
   else {
 
   }
 } 
 else {
-  $user = new User;
+  $category = new Category;
 }
 
 ?>
@@ -28,7 +33,7 @@ else {
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>Create User</title>
+    <title>Create Category</title>
     <script src="../js/app.js" defer></script>
     <link href="../favicon.ico" rel="icon">
     <link href="../css/styles.css" rel="stylesheet">
@@ -63,18 +68,18 @@ else {
         include("../login.php");
       }
       ?>
-      <main role="main" id="create-user">
-        <a class="back-link" href="../users/index.php">&laquo; Back to List</a>
+      <main role="main" id="create-category">
+        <a class="back-link" href="../categories/index.php">&laquo; Back to List</a>
 
-        <h1>Create User</h1>
+        <h1>Create Category</h1>
 
         <form action="new.php" method="POST">
           <section>
             <p>*</p>
             <p>= required</p>
           </section>
-          <?php include('../users/form-fields.php') ?>
-          <input type="submit" value="Create User">
+          <?php include('../categories/form-fields.php') ?>
+          <input type="submit" value="Create Category">
         </form>
       </main>
     </div>
@@ -84,8 +89,8 @@ else {
         <nav>
           <ul>
             <li><a href="/web-289/public/index.php">Home</a></li>
-            <li><a href="/web-289/public/recipes/index.php">Recipes</a></li>
-            <li><a href="/web-289/public/about.php">About Us</a></li>
+            <li><a href="../recipes/index.php">Recipes</a></li>
+            <li><a href="/web-289/public/about.html">About Us</a></li>
           </ul>
         </nav>
         <section>

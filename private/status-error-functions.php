@@ -3,50 +3,37 @@
 function require_login() {
   global $session;
 
-  if(!$session->is_logged_in()) {
+  if (!$session->is_logged_in()) {
+    $session->message("Access Denied. You must be logged in.");
     redirect_to(url_for('/index.php'));
-  }
-  else {
-  
   }
 }
 
 function require_admin() {
   global $session;
 
-  if(!$session->is_admin()) {
+  if (!$session->is_admin()) {
+    $session->message("Access Denied. Page requires Admin access.");
     redirect_to(url_for('/index.php'));
-  }
-  else {
-
   }
 }
 
 function require_super_admin() {
   global $session;
 
-  if(!$session->is_super_admin()) {
+  if (!$session->is_super_admin()) {
+    $session->message("Access Denied. Page requires Super Admin access.");
     redirect_to(url_for('/index.php'));
-  }
-  else {
-
-  }
+  } 
 }
 
+function require_admin_or_super_admin() {
+  global $session;
 
-function display_errors($errors=array()) {
-  $output = '';
-  if(!empty($errors)) {
-    $output .= "<div id=\"errors\">";
-    $output .= "<p>Please fix the following errors:<p>";
-    $output .= "<ul>";
-    foreach($errors as $error) {
-      $output .= "<li>" . h($error) . "</li>";
-    }
-    $output .= "</ul>";
-    $output .= "</div>";
+  if (!$session->is_admin() && !$session->is_super_admin()) {
+    $session->message("Access Denied. Page requires Admin or Super Admin access.");
+    redirect_to(url_for('/index.php'));
   }
-  return $output;
 }
 
 function display_session_message() {

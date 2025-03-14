@@ -68,7 +68,7 @@ class DatabaseObject {
     if (isset($record['user_id'])) {
       $object->id = $record['user_id'];
     }
-
+    
     foreach($record as $property => $value) {
       $camelCaseProperty = lcfirst(str_replace('_', '', ucwords($property, '_')));
 
@@ -113,18 +113,24 @@ class DatabaseObject {
       $attribute_pairs[] = "{$key}='{$value}'";
     }
 
+    $primary_key_column = rtrim(static::$table_name, 's') . '_id';
+    
     $sql = "UPDATE " . static::$table_name . " SET ";
     $sql .= join(', ', $attribute_pairs);
-    $sql .= " WHERE id='" . self::$database->escape_string($this->id) . "'";
-    $sql .= "LIMIT 1";
+    $sql .= " WHERE " . $primary_key_column . "='" . self::$database->escape_string($this->id) . "'";
+    $sql .= " LIMIT 1";
+
     $result = self::$database->query($sql);
     return $result;
   }
 
   public function delete() {
+    $primary_key_column = rtrim(static::$table_name, 's') . '_id';
+
     $sql = "DELETE FROM " . static::$table_name;
-    $sql .= " WHERE id='" . self::$database->escape_string($this->id) . "' ";
-    $sql .= "LIMIT 1";
+    $sql .= " WHERE " . $primary_key_column . "='" . self::$database->escape_string($this->id) . "'";
+    $sql .= " LIMIT 1";
+
     $result = self::$database->query($sql);
     return $result;
   }
@@ -138,19 +144,24 @@ class DatabaseObject {
     }
   }
 
+  public function merge_attributes($args = []) {
+    foreach ($args as $key => $value) {
+        $camelCaseKey = lcfirst(str_replace('_', '', ucwords($key, '_')));
+        
+        if (property_exists($this, $camelCaseKey) && !is_null($value)) {
+            $this->$camelCaseKey = $value;
+        }
+    }
+  }
+
   public function attributes() {
     $attributes = [];
 
-    foreach(static::$db_columns as $index => $column) {
-
-      if ($index === 0) {
-        continue;
-      }
-
+    foreach(static::$db_columns as $column) {
       $camelCaseProperty = lcfirst(str_replace(' ', '', ucwords(str_replace('_', ' ', $column))));
 
       if (property_exists($this, $camelCaseProperty)) {
-        $attributes[$column] = $this->$camelCaseProperty;
+          $attributes[$column] = $this->$camelCaseProperty;
       }
     }
 

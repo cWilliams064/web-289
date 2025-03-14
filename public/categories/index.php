@@ -3,14 +3,13 @@
 require_once('../../private/initialize.php');
 require_admin_or_super_admin();
 
-$users = User::find_all();
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>Manage Users</title>
+    <title>Manage Categories</title>
     <script src="../js/app.js" defer></script>
     <link href="../favicon.ico" rel="icon">
     <link href="../css/styles.css" rel="stylesheet">
@@ -46,47 +45,79 @@ $users = User::find_all();
       }
       ?>
       <main role="main" id="manage-users">
-        <h1>Manage Users</h1>
-        <a href="/web-289/public/users/new.php">Create User</a>
+        <h1>Manage Categories</h1>
+
+        <a href="./new.php">Create Category</a>
+
+        <h2>Meal Types</h2>
         <table>
           <tr>
             <th>ID</th>
-            <th>First name</th>
-            <th>Last name</th>
-            <th>Username</th>
-            <th>Email</th>
-            <th>Role</th>
-            <th>Created At</th>
-            <th>Active</th>
-            <th>&nbsp;</th>
-            <th>&nbsp;</th>
+            <th>Name</th>
             <th>&nbsp;</th>
           </tr>
-          <?php foreach($users as $user) { ?>
+          <?php 
+            Category::set_table('meal_types');
+            $mealTypes = Category::find_all();
+          ?>
+          <?php foreach($mealTypes as $mealType) { ?>
             <tr>
-              <td><?= $user->id; ?></td>
-              <td><?= h($user->firstName); ?></td>
-              <td><?= h($user->lastName); ?></td>
-              <td><?= h($user->username); ?></td>
-              <td><?= h($user->email); ?></td>
-              <td><?= h($user->role_level()); ?></td>
-              <td><?= h($user->createdAt); ?></td>
-              <td><?= h($user->activity); ?></td>
-              <td><a class="action" href="<?= url_for('../public/users/show.php?id=' . h(u($user->id))); ?>">View</a></td>
-              <td><a class="action" href="<?= url_for('../public/users/edit.php?id=' . h(u($user->id))); ?>">Edit</a></td>
-              <td><a class="action" href="<?= url_for('../public/users/delete.php?id=' . h(u($user->id))); ?>">Delete</a></td>
+              <td><?= $mealType->id; ?></td>
+              <td><?= h($mealType->name); ?></td>
+              <td><a class="action" href="<?= url_for('../public/categories/delete.php?category_type=meal_types&id=' . h(u($mealType->id))); ?>">Delete</a></td>
+            </tr>
+          <?php } ?>
+        </table>
+
+        <h2>Ethnic Types</h2>
+        <table>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>&nbsp;</th>
+          </tr>
+          <?php 
+            Category::set_table('ethnic_types');
+            $ethnicTypes = Category::find_all();
+          ?>
+          <?php foreach($ethnicTypes as $ethnicType) { ?>
+            <tr>
+              <td><?= $ethnicType->id; ?></td>
+              <td><?= h($ethnicType->name); ?></td>
+              <td><a class="action" href="<?= url_for('../public/categories/delete.php?category_type=ethnic_types&id=' . h(u($ethnicType->id))); ?>">Delete</a></td>
+            </tr>
+          <?php } ?>
+        </table>
+
+        <h2>Diet Types</h2>
+        <table>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>&nbsp;</th>
+          </tr>
+          <?php 
+            Category::set_table('diet_types');
+            $dietTypes = Category::find_all();
+          ?>
+          <?php foreach($dietTypes as $dietType) { ?>
+            <tr>
+              <td><?= $dietType->id; ?></td>
+              <td><?= h($dietType->name); ?></td>
+              <td><a class="action" href="<?= url_for('../public/categories/delete.php?category_type=diet_types&id=' . h(u($dietType->id))); ?>">Delete</a></td>
             </tr>
           <?php } ?>
         </table>
       </main>
     </div>
+
     <footer>
         <p>&copy; 2025 Grandma's Pantry. All Rights Reserved.</p>
         <nav>
           <ul>
             <li><a href="/web-289/public/index.php">Home</a></li>
-            <li><a href="/web-289/public/recipes/index.php">Recipes</a></li>
-            <li><a href="/web-289/public/about.php">About Us</a></li>
+            <li><a href="/web-289/recipes/index.php">Recipes</a></li>
+            <li><a href="/web-289/public/about.html">About Us</a></li>
           </ul>
         </nav>
         <section>
@@ -96,5 +127,5 @@ $users = User::find_all();
         </section>
     </footer>
   </body>
-  
+
 </html>

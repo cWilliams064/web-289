@@ -1,4 +1,4 @@
-<?php require_once(dirname(__DIR__) . '/private/initialize.php'); ?>
+<?php require_once('../private/initialize.php'); ?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -16,7 +16,7 @@
       <nav>
         <ul>
           <li><a href="index.php">Home</a></li>
-          <li><a href="#">Recipes</a></li>
+          <li><a href="recipes/index.php">Recipes</a></li>
           <li><a href="about.php">About Us</a></li>
           <li><a href="#" id="open-sidebar">Log In</a></li>
           <li><a href="#" id="open-sidebar-icon"><img src="../public/assets/login-image.png" width="27" height="27" alt="User icon that links to login."></a></li>
@@ -44,22 +44,22 @@
           <section>
             <h1>Grandma's Pantry</h1>
             <p>We inspire flavor, you create magic!</p>
-            <a href="recipes/index.php">View Our Recipes</a>
+            <a href="./recipes/index.php">View Our Recipes</a>
           </section>
           <img src="assets/h1-image.png" width="1084" height="427" alt="Picnic foods with a juice pitcher on top of a wooden counter in a kitchen with the sun shining in.">
         </section>
         <section id="popular-categories">
           <h2>Popular Categories</h2>
           <section>
-            <a href="#"><h3>Breakfast</h3></a>
+            <a href="./recipes/index.php"><h3>Breakfast</h3></a>
             <img src="assets/home-category/breakfast-category.png" width="322" height="395" alt="An egg croissant layered breakfast meal.">
           </section>
           <section>
-            <a href="#"><h3>Vegan</h3></a>
+            <a href="./recipes/index.php"><h3>Vegan</h3></a>
             <img src="assets/home-category/vegan-category.png" width="322" height="395" alt="Vegan meal with avocado slices and egg on whole wheat bread.">
           </section>
           <section>
-            <a href="#"><h3>Italian</h3></a>
+            <a href="./recipes/index.php"><h3>Italian</h3></a>
             <img src="assets/home-category/italian-category.png" width="322" height="395" alt="Italian pasta with spaghetti noodles with tomatoes and herbs.">
           </section>
         </section>
@@ -78,15 +78,15 @@
         <p>&copy; 2025 Grandma's Pantry. All Rights Reserved.</p>
         <nav>
           <ul>
-            <li><a href="index.php">Home</a></li>
+            <li><a href="./index.php">Home</a></li>
             <li><a href="recipes/index.php">Recipes</a></li>
-            <li><a href="about.html">About Us</a></li>
+            <li><a href="./about.php">About Us</a></li>
           </ul>
         </nav>
         <section>
-          <img src="assets/icons/instagram.png" width="31" height="31" alt="The social media Instagram logo.">
-          <img src="assets/icons/x-social-media.png" width="31" height="31" alt="The social media X logo">
-          <img src="assets/icons/facebook.png" width="31" height="31" alt="The social media Facebook logo.">
+          <a href="https://www.instagram.com/accounts/login/?hl=en" target="_blank"><img src="assets/icons/instagram.png" width="31" height="31" alt="The social media Instagram logo."></a>
+          <a href="https://x.com/i/flow/login" target="_blank"><img src="assets/icons/x-social-media.png" width="31" height="31" alt="The social media X logo"></a>
+          <a href="https://www.facebook.com/login.php/" target="_blank"><img src="assets/icons/facebook.png" width="31" height="31" alt="The social media Facebook logo."></a>
         </section>
     </footer>
   </body>

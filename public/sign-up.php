@@ -65,7 +65,7 @@ else {
 
         <?php echo display_errors($user->errors); ?>
 
-        <form action="sign-up.php" method="post" enctype="multipart/form-data">
+        <form action="sign-up.php" method="POST">
           <section>
             <p>*</p>
             <p>= required</p>
@@ -81,9 +81,9 @@ else {
         <p>&copy; 2025 Grandma's Pantry. All Rights Reserved.</p>
         <nav>
           <ul>
-            <li><a href="index.php">Home</a></li>
+            <li><a href="./index.php">Home</a></li>
             <li><a href="recipes/index.php">Recipes</a></li>
-            <li><a href="about.html">About Us</a></li>
+            <li><a href="./about.php">About Us</a></li>
           </ul>
         </nav>
         <section>

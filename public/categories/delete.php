@@ -1,25 +1,27 @@
 <?php 
 
 require_once('../../private/initialize.php');
-
 require_admin_or_super_admin();
 
-if(is_post_request()) {
-  $args = $_POST['user'];
-  $user = new User($args);
-  $errors = $user->validate();
-  $result = $user->save();
+if(!isset($_GET['id'])) {
+  redirect_to(url_for('../public/categories/index.php'));
+}
 
-  if($result === true) {
-    $new_id = $user->id;
-    redirect_to(url_for('../public/users/index.php'));
-  } 
-  else {
+$id = $_GET['id'];
+$category_type = $_GET['category_type'];
 
-  }
-} 
-else {
-  $user = new User;
+Category::set_table($category_type);
+
+$category = Category::find_category_by_id($id);
+
+if (!isset($category)) {
+    redirect_to(url_for('../public/categories/index.php'));
+}
+
+if (is_post_request()) {
+    $result = $category->delete();
+    $session->message('The category was deleted successfully.');
+    redirect_to(url_for('../public/categories/index.php'));
 }
 
 ?>
@@ -28,7 +30,7 @@ else {
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>Create User</title>
+    <title>Delete Category</title>
     <script src="../js/app.js" defer></script>
     <link href="../favicon.ico" rel="icon">
     <link href="../css/styles.css" rel="stylesheet">
@@ -63,18 +65,15 @@ else {
         include("../login.php");
       }
       ?>
-      <main role="main" id="create-user">
-        <a class="back-link" href="../users/index.php">&laquo; Back to List</a>
+      <main role="main" id="delete-category">
+        <a class="back-link" href="<?php echo url_for('../public/categories/index.php'); ?>">&laquo; Back to List</a>
 
-        <h1>Create User</h1>
+        <h1>Delete Category</h1>
+        <p>Are you sure you want to delete the category: </p>
+        <p class="item"><?php echo h($category->name); ?></p>
 
-        <form action="new.php" method="POST">
-          <section>
-            <p>*</p>
-            <p>= required</p>
-          </section>
-          <?php include('../users/form-fields.php') ?>
-          <input type="submit" value="Create User">
+        <form action="<?php echo url_for('../public/categories/delete.php?category_type=' . h(u($category->category_type)) . '&id=' . h(u($category->id))); ?>" method="post">
+          <input type="submit" name="commit" value="Delete Category">
         </form>
       </main>
     </div>
@@ -84,8 +83,8 @@ else {
         <nav>
           <ul>
             <li><a href="/web-289/public/index.php">Home</a></li>
-            <li><a href="/web-289/public/recipes/index.php">Recipes</a></li>
-            <li><a href="/web-289/public/about.php">About Us</a></li>
+            <li><a href="../recipes/index.php">Recipes</a></li>
+            <li><a href="/web-289/public/about.html">About Us</a></li>
           </ul>
         </nav>
         <section>

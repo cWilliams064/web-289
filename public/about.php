@@ -16,7 +16,7 @@
       <nav>
         <ul>
           <li><a href="index.php">Home</a></li>
-          <li><a href="#">Recipes</a></li>
+          <li><a href="recipes/index.php">Recipes</a></li>
           <li><a href="about.php">About Us</a></li>
           <li><a href="#" id="open-sidebar">Log In</a></li>
           <li><a href="#" id="open-sidebar-icon"><img src="assets/login-image.png" width="27" height="27" alt="User icon that links to login."></a></li>
@@ -57,9 +57,9 @@
         <p>&copy; 2025 Grandma's Pantry. All Rights Reserved.</p>
         <nav>
           <ul>
-            <li><a href="index.php">Home</a></li>
-            <li><a href="recipes/index.php">Recipes</a></li>
-            <li><a href="about.html">About Us</a></li>
+            <li><a href="/web-289/public/index.php">Home</a></li>
+            <li><a href="/web-289/public/recipes/index.php">Recipes</a></li>
+            <li><a href="/web-289/public/about.php">About Us</a></li>
           </ul>
         </nav>
         <section>

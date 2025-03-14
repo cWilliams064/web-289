@@ -39,6 +39,10 @@ header {
   z-index: 4;
 }
 
+header button {
+  display: none;
+}
+
 header > section {
   align-items: center;
   display: flex;
@@ -148,6 +152,20 @@ footer {
   width: 30px;
 }
 
+#login .user-errors {
+  background-color: #ff0000;
+  border-radius: 14px;
+  font-size: 12px;
+  margin: 10px 0;
+  padding: 4px;
+  text-align: center;
+  width: 120px;
+}
+
+.error-input {
+  border: 2px solid #ff0000;
+}
+
 #sidebar #login h2 {
   margin-bottom: 45px;
 }
@@ -156,16 +174,20 @@ footer {
   font-size: 20px;
 }
 
-#sidebar #login form input:not(:last-of-type) {
+#login form section input {
   border: 1px solid #808080;
   border-radius: 10px;
   height: 35px;
-  margin: 10px 0 2rem 0;
+  margin-top: 10px;
   padding: 10px;
   width: 100%;
 }
 
-#login input:last-of-type,
+#login form section {
+  margin-bottom: 30px;
+}
+
+#login form > input:last-of-type,
 #logged-in a:first-of-type {
   background-color: #cc2e72;
   border: 1px solid #808080;
@@ -219,14 +241,16 @@ footer {
 #login h2,
 #login label,
 #logged-in h2,
-#logged-in p {
+#logged-in p,
+#login .user-errors {
   color: #fff;
 }
 
-#login form input:last-of-type:hover,
+#login form > input:last-of-type:hover,
 #logged-in a:first-of-type:hover,
 #signup-page #signup-submit:hover,
-#create-user input[type=submit]:hover {
+#create-user input[type=submit]:hover,
+#create-category input[type=submit]:hover {
   background-color: #a41150;
 }
 
@@ -343,6 +367,10 @@ main img {
 
 /*** Recipes Page ***/
 
+#recipes-page {
+  padding-bottom: 500px;
+}
+
 /*** About Page ***/
 
 #about-page {
@@ -393,24 +421,18 @@ main img {
 }
 
 /*** Sign Up Page and Create User Page ***/
+
 #signup-page {
   display: flex;
   flex-direction: column;
   width: 100%;
 }
 
-#login #errors {
-  color: #fff;
-  margin: -20px 0 10px 0;
-}
-
-#login #errors p {
-  margin-top: 0;
-}
-
-form > section {
+#signup-page form > section,
+#create-user form > section,
+#create-category form > section {
   display: flex;
-  margin-bottom: 30px;
+  margin-bottom: 20px;
 }
 
 form > section p:first-of-type {
@@ -421,6 +443,7 @@ form > section p:first-of-type {
 #signup-page form {
   display: flex;
   flex-direction: column;
+  margin: 0 auto;
 }
 
 #signup-page input {
@@ -443,19 +466,46 @@ form > section p:first-of-type {
   text-align: center;
 }
 
-#signup-page a {
+#signup-page a,
+#manage-users a,
+#create-user a,
+#edit-user a,
+#create-category a {
   color: #0d5f6a;
+}
+
+.create-user-errors {
+  color: #ff0000;
+  font-size: 14px;
+  margin: -10px 0 20px 0;
+}
+
+#create-user form {
+  padding-left: 1rem;
+}
+
+#create-user form input,
+#create-user form select {
+  border-radius: 5px;
+  font-size: 15px;
+  margin-top: 10px;
+  padding: 5px;
 }
 
 #create-user h1 {
   margin-top: 2.5rem;
 }
 
-#create-user form input {
+#create-user form div,
+#edit-user form div,
+#create-user form input,
+#edit-user form input {
   margin-bottom: 20px;
 }
 
-#create-user input[type=submit] {
+#create-user input[type=submit],
+#edit-submit,
+#create-category input[type=submit] {
   margin-top: 1rem;
   padding: 5px 20px;
 }
@@ -479,7 +529,9 @@ form > section p:first-of-type {
 }
 
 #signup-page #signup-submit, 
-#create-user input[type=submit] {
+#create-user form input[type=submit],
+#edit-submit,
+#create-category input[type=submit] {
   background-color: #0d5f6a;
   border: 1px solid #808080;
   border-radius: 5px;
@@ -487,6 +539,10 @@ form > section p:first-of-type {
 }
 
 /*** Manage Pages ***/
+
+#manage-users {
+  margin-bottom: 3rem;
+}
 
 #manage-users a {
   color: #0d5f6a;
@@ -502,6 +558,23 @@ form > section p:first-of-type {
   border: 1px solid black;
   padding:  5px;
   text-align: center;
+}
+
+#delete-user h1 {
+  margin: 50px 0;
+}
+
+#delete-user input[type=submit] {
+  margin: 2rem 0 11rem 0;
+}
+
+#create-category input,
+#create-category select {
+  margin-bottom: 30px;
+}
+
+#create-category input[type=submit] {
+  margin: 30px 0 8rem 0;
 }
 
 /*** Footer ***/
@@ -527,6 +600,10 @@ footer nav {
   grid-row: 1;
 }
 
+footer ul li:last-of-type {
+  margin-left: 6px;
+}
+
 footer section {
   grid-column: 3;
   grid-row: 1;
@@ -538,3 +615,5 @@ footer section img {
   margin: 0 5px;
   width: 25px;
 }
+
+/*** Viewport ***/

@@ -8,19 +8,7 @@ require_login();
 <div id="sidebar">
 
   <div id="logged-in">
-    <?php
-    $scriptPath = $_SERVER['SCRIPT_NAME'];
-    if (strpos($scriptPath, '/users/') !== false) {
-      $closeIconPath = '../assets/icons/x-icon.svg';
-      $logoutPath = '../logout.php';
-    }
-    else {
-      $closeIconPath = '../public/assets/icons/x-icon.svg';
-      $logoutPath = '../public/logout.php';
-    }
-    ?>
-
-    <button id="close-sidebar" aria-label="Close Sidebar"><img src="<?= $closeIconPath ?>" width="14" height="14" alt="A X icon."></button>
+    <button id="close-sidebar" aria-label="Close Sidebar"><img src="/web-289/public/assets/icons/x-icon.svg" width="14" height="14" alt="A X icon."></button>
 
     <?php
       $user = $session->get_user();
@@ -37,10 +25,12 @@ require_login();
       <p>Email: <?= $user->email; ?></p>
     </section>
 
-    <a href="<?= $logoutPath ?>">Logout</a>
+    <a href="/web-289/public/logout.php">Logout</a>
     <a href="#">My Recipes</a>
     <a href="#">Post Recipe</a>
-    <a href="../public/users/index.php">Manage Users</a>
-    <a href="#">Manage Categories</a>
+    <?php if($session->is_super_admin_or_admin()): ?>
+    <a href="/web-289/public/users/index.php">Manage Users</a>
+    <a href="/web-289/public/categories/index.php">Manage Categories</a>
+    <?php endif; ?>
   </div>
 </div>
