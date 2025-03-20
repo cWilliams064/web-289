@@ -12,21 +12,21 @@
   </head>
 
   <body>
-    <header role="banner">
+  <header role="banner">
       <nav>
         <ul>
           <li><a href="index.php">Home</a></li>
           <li><a href="recipes/index.php">Recipes</a></li>
           <li><a href="about.php">About Us</a></li>
           <li><a href="#" id="open-sidebar"><?php echo !$session->is_logged_in() ? 'Log In' : 'View Profile'; ?></a></li>
-          <li><a href="#" id="open-sidebar-icon"><img src="assets/login-image.png" width="27" height="27" alt="User icon that links to login."></a></li>
+          <li><a href="#" id="open-sidebar-icon"><img src="../public/assets/login-image.png" width="27" height="27" alt="User icon that links to login."></a></li>
         </ul>
       </nav>
-      <section>
+      <form>
         <input type="text" placeholder="Search a recipe">
-        <img src="assets/icons/search.svg" width="64" height="64" alt="Magnifying glass search icon.">
-      </section>
-      <img src="assets/logo.png" width="500" height="500" alt="Pink and navy cupcake logo for Grandma's Pantry.">
+        <button><img src="../public/assets/icons/search.svg" width="64" height="64" alt="Magnifying glass submit icon."></button>
+      </form>
+      <a href=""><img src="assets/logo.png" width="500" height="500" alt="Pink and navy cupcake logo for Grandma's Pantry."></a>
     </header>
 
     <div id="wrapper">

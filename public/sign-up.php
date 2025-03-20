@@ -2,10 +2,11 @@
 
 require_once('../private/initialize.php'); 
 
-if(is_post_request()) {
+if(is_post_request() && $_POST['signup']) {
 
   $args = $_POST['user'];
   $user = new User($args);
+  $user->validate();
   $result = $user->save();
 
   if($result === true) {
@@ -36,21 +37,21 @@ else {
   </head>
 
   <body>
-    <header role="banner">
+  <header role="banner">
       <nav>
         <ul>
           <li><a href="index.php">Home</a></li>
-          <li><a href="#">Recipes</a></li>
+          <li><a href="recipes/index.php">Recipes</a></li>
           <li><a href="about.php">About Us</a></li>
-          <li><a href="#" id="open-sidebar">Log In</a></li>
-          <li><a href="#" id="open-sidebar-icon"><img src="assets/login-image.png" width="27" height="27" alt="User icon that links to login."></a></li>
+          <li><a href="#" id="open-sidebar"><?php echo !$session->is_logged_in() ? 'Log In' : 'View Profile'; ?></a></li>
+          <li><a href="#" id="open-sidebar-icon"><img src="../public/assets/login-image.png" width="27" height="27" alt="User icon that links to login."></a></li>
         </ul>
       </nav>
-      <section>
+      <form>
         <input type="text" placeholder="Search a recipe">
-        <img src="assets/icons/search.svg" width="64" height="64" alt="Magnifying glass search icon.">
-      </section>
-      <img src="assets/logo.png" width="500" height="500" alt="Pink and navy cupcake logo for Grandma's Pantry.">
+        <button><img src="../public/assets/icons/search.svg" width="64" height="64" alt="Magnifying glass submit icon."></button>
+      </form>
+      <a href=""><img src="assets/logo.png" width="500" height="500" alt="Pink and navy cupcake logo for Grandma's Pantry."></a>
     </header>
 
     <div id="wrapper">
@@ -63,17 +64,15 @@ else {
       <main role="main" id="signup-page">
         <h1>Sign Up</h1>
 
-        <?php echo display_errors($user->errors); ?>
-
         <form action="sign-up.php" method="POST">
           <section>
             <p>*</p>
             <p>= required</p>
           </section>
           <?php include('users/form-fields.php') ?>
-          <input type="submit" id="signup-submit" value="Create Account">
+          <input type="submit" id="signup-submit" name="submit" value="Create Account">
         </form>
-        <p>Already have an account? <a href="login.php">Log in</a></p>
+        <p>Already have an account? <a href="#" id="signup-login-link">Log in</a></p>
       </main>
     </div>
     

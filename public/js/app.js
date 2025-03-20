@@ -5,6 +5,7 @@
 const openSidebarLinks = document.querySelectorAll('#open-sidebar, #open-sidebar-icon');
 const sidebar = document.getElementById('sidebar');
 const closeSidebarButton = document.getElementById('close-sidebar');
+const signupLoginLink = document.getElementById('signup-login-link');
 
 document.addEventListener("DOMContentLoaded", function () {
   if (localStorage.getItem("sidebarClosed") === "true") {
@@ -30,6 +31,8 @@ openSidebarLinks.forEach(link => {
 });
 
 closeSidebarButton.addEventListener('click', closeSidebar);
+
+signupLoginLink.addEventListener('click', openSidebar);
 
 document.addEventListener("DOMContentLoaded", function () {
   if (localStorage.getItem("clearSidebar") === "true") {

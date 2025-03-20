@@ -32,9 +32,9 @@ if($session->is_logged_in()) {
       </nav>
       <form>
         <input type="text" placeholder="Search a recipe">
-        <input type="submit">
+        <button><img src="../public/assets/icons/search.svg" width="64" height="64" alt="Magnifying glass submit icon."></button>
       </form>
-      <img src="assets/logo.png" width="500" height="500" alt="Pink and navy cupcake logo for Grandma's Pantry.">
+      <a href=""><img src="assets/logo.png" width="500" height="500" alt="Pink and navy cupcake logo for Grandma's Pantry."></a>
     </header>
 
     <div id="wrapper">

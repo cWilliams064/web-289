@@ -9,7 +9,7 @@
 }
 
 html {
-  font: 17px Raleway, Arial, sans-serif;
+  font: 18px Raleway, Arial, sans-serif;
 }
 
 body {
@@ -42,24 +42,44 @@ header {
 header form {
   align-items: center;
   display: flex;
-  justify-content: left;
+  justify-content: center;
   flex-direction: row-reverse;
   grid-column: 1;
   grid-row: 1;
 }
 
-header form input:first-of-type {
-  padding: 5px 0 5px 40px;
-  width: 250px;
+header > form input {
+  padding: 10px 0 10px 40px;
+  border: 1px solid #808080;
+  border-radius: 0 15px 15px 0;
+  width: 350px;
+  height: 30px;
 }
 
-header > img {
+header form button {
+  height: 20px;
+  background-color: #0d5f6a;
+  border: 1px solid #808080;
+  border-radius: 15px 0 0 15px;
+  width: 60px;
+}
+
+header form button img {
   height: auto;
+  margin-bottom: 10px;
+  width: 35px;
+}
+
+header > a {
   left: 50%;
   position: absolute;
-  top: 85%;
+  top: 90%;
   transform: translate(-50%, -50%);
-  width: 250px;
+}
+
+header > a img {
+  height: auto;
+  max-width: 250px;
 }
 
 header nav li {
@@ -127,6 +147,11 @@ footer {
   align-items: center;
 }
 
+header form input,
+header form button {
+  height: 40px;
+}
+
 /*** Side Bar ***/
 
 #sidebar {
@@ -139,7 +164,7 @@ footer {
   top: 0;
   transition: right 0.4s ease-in-out;
   visibility: hidden;
-  width: 300px;
+  width: 350px;
   z-index: 3;
 }
 
@@ -157,11 +182,11 @@ footer {
 #login .user-errors {
   background-color: #ff0000;
   border-radius: 14px;
-  font-size: 12px;
+  font-size: 14px;
   margin: 10px 0;
   padding: 4px;
   text-align: center;
-  width: 120px;
+  width: 140px;
 }
 
 #create-user.error-input,
@@ -302,7 +327,7 @@ main img {
   filter: brightness(70%);
   grid-column: 1;
   grid-row: 1;
-  margin: 0 auto;
+  width: 100%;
 }
 
 #home-page > section:first-of-type a {
@@ -640,10 +665,21 @@ footer section img {
 
 /*** Viewport ***/
 
-@media screen and (min-width: 1070px) {
+@media screen and (max-width: 1280px) {
+  header nav {
+    justify-self: end;
+  }
 
+
+  header > form {
+    justify-content: left;
+  }
+
+  header > form input {
+    width: 250px;
+  }
 }
 
-@media screen and (max-width: 1070px) {
-
+@media screen and (max-width: 1150px) {
+ 
 }

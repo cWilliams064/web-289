@@ -38,10 +38,10 @@ $viewUser = User::find_by_id($id);
           <li><a href="#" id="open-sidebar-icon"><img src="../assets/login-image.png" width="27" height="27" alt="User icon that links to login."></a></li>
         </ul>
       </nav>
-      <section>
+      <form>
         <input type="text" placeholder="Search a recipe">
-        <img src="../assets/icons/search.svg" width="64" height="64" alt="Magnifying glass search icon.">
-      </section>
+        <button><img src="../public/assets/icons/search.svg" width="64" height="64" alt="Magnifying glass submit icon."></button>
+      </form>
       <img src="../assets/logo.png" width="500" height="500" alt="Pink and navy cupcake logo for Grandma's Pantry.">
     </header>
 
