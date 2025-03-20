@@ -13,7 +13,6 @@ function require_admin() {
   global $session;
 
   if (!$session->is_admin()) {
-    $session->message("Access Denied. Page requires Admin access.");
     redirect_to(url_for('/index.php'));
   }
 }
@@ -22,16 +21,14 @@ function require_super_admin() {
   global $session;
 
   if (!$session->is_super_admin()) {
-    $session->message("Access Denied. Page requires Super Admin access.");
     redirect_to(url_for('/index.php'));
-  } 
+  }
 }
 
 function require_admin_or_super_admin() {
   global $session;
 
-  if (!$session->is_admin() && !$session->is_super_admin()) {
-    $session->message("Access Denied. Page requires Admin or Super Admin access.");
+  if (!$session->is_super_admin_or_admin()) {
     redirect_to(url_for('/index.php'));
   }
 }

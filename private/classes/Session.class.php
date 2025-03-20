@@ -29,36 +29,45 @@ class Session {
   }
   
   public function is_admin() {
-    $roleId = User::get_role_id($this->userId);
-    
-    if ($roleId !== false) {
-      settype($roleId, 'int');
-      return $roleId === 2;
+    if (!$this->is_logged_in()) {
+        return false;
     }
 
-    return false;
+    $currentUser = User::find_by_id($this->id);
+
+    if ($currentUser) {
+      settype($currentUser->roleId, 'int');
+    }
+
+    return $currentUser && $currentUser->roleId === 2;
   }
 
   public function is_super_admin() {
-    $roleId = User::get_role_id($this->userId);
-    
-    if ($roleId !== false) {
-      settype($roleId, 'int');
-      return $roleId === 3;
+    if (!$this->is_logged_in()) {
+        return false;
     }
 
-    return false;
+    $currentUser = User::find_by_id($this->id);
+
+    if ($currentUser) {
+        settype($currentUser->roleId, 'int');
+    }
+
+    return $currentUser && $currentUser->roleId === 3;
   }
 
   public function is_super_admin_or_admin() {
-    $roleId = User::get_role_id($this->userId);
-    
-    if ($roleId !== false) {
-      settype($roleId, 'int');
-      return $roleId === 2 || $roleId === 3;
+    if (!$this->is_logged_in()) {
+        return false;
     }
 
-    return false;
+    $current_user = User::find_by_id($this->userId);
+
+    if ($current_user) {
+        settype($current_user->roleId, 'int');
+    }
+
+    return $current_user && ($current_user->roleId === 2 || $current_user->roleId === 3);
   }
 
   public function get_last_login() {

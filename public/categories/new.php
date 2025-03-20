@@ -5,25 +5,23 @@ require_admin_or_super_admin();
 
 if(is_post_request()) {
   $args = $_POST['category'];
-  $category = new Category($_POST['category']);
+  $category = new Category($args);
 
   if (isset($args['category_type']) && in_array($args['category_type'], ['meal', 'ethnic', 'diet'])) {
     $category->category_type = $args['category_type'];
   }
 
-  $errors = $category->validate_category();
+  $categoryErrors = $category->validate_category();
   $result = $category->save();
 
   if($result === true) {
     $new_id = $category->id;
     $session->message('The Category was created successfully.');
     redirect_to(url_for('../public/categories/index.php'));
-  } 
-  else {
+  } else {
 
   }
-} 
-else {
+} else {
   $category = new Category;
 }
 

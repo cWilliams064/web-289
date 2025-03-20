@@ -58,15 +58,19 @@ class Category extends DatabaseObject {
     }
 
 	protected function create() {
+		$this->validate_category();
+    if(!empty($this->errors)) { return false; }
+
 		static::set_table($this->category_type);
     $name = self::$database->escape_string($this->name);
+		$name_column = static::$db_columns[1] ?? null;
 
     $sql = "INSERT INTO " . static::$table_name;
-    $sql .= " VALUES ('$name')";
+    $sql .= " ($name_column) VALUES ('$name')";
 
     $result = self::$database->query($sql);
     if ($result) {
-        $this->id = self::$database->insert_id;
+      $this->id = self::$database->insert_id;
     }
 
     return $result;
@@ -102,7 +106,6 @@ class Category extends DatabaseObject {
 	public function validate_category() {
     $this->errors = [];
 
-    // Validate name
     if (is_blank($this->name)) {
         $this->errors['name'] = "Category name cannot be blank.";
     } elseif (!has_length($this->name, ['min' => 2, 'max' => 255])) {

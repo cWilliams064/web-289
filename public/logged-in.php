@@ -5,8 +5,7 @@ require_login();
 
 ?>
 
-<div id="sidebar">
-
+<div id="sidebar" class="<?= ($session->is_logged_in()) ? 'active' : ''; ?>" data-initial="<?= $session->is_logged_in() ? 'true' : 'false'; ?>">
   <div id="logged-in">
     <button id="close-sidebar" aria-label="Close Sidebar"><img src="/web-289/public/assets/icons/x-icon.svg" width="14" height="14" alt="A X icon."></button>
 

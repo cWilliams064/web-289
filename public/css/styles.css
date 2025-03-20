@@ -22,7 +22,7 @@ body {
   background-color: #fff;
   display: flex;
   justify-self: center;
-  padding: 4rem 2rem 1rem 2rem;
+  padding: 4rem 0 1rem 0;
   position: relative;
   width: 80%;
 }
@@ -39,39 +39,39 @@ header {
   z-index: 4;
 }
 
-header button {
-  display: none;
-}
-
-header > section {
+header form {
   align-items: center;
   display: flex;
+  justify-content: left;
   flex-direction: row-reverse;
-  gap: 15px;
   grid-column: 1;
   grid-row: 1;
 }
 
-header > section input {
-  border: 1px solid #808080;
-  border-radius: 20px;
-  height: 30px;
-  padding: 0 10px;
+header form input:first-of-type {
+  padding: 5px 0 5px 40px;
   width: 250px;
 }
 
-header > section img {
-  height: auto;
-  width: 35px;
-}
-
-header > img:last-of-type {
+header > img {
   height: auto;
   left: 50%;
   position: absolute;
   top: 85%;
   transform: translate(-50%, -50%);
   width: 250px;
+}
+
+header nav li {
+  white-space: nowrap;
+}
+
+header nav li a:hover {
+  border-bottom: 1px solid #fff;
+}
+
+header nav li:last-of-type a {
+  border: none;
 }
 
 nav {
@@ -138,12 +138,14 @@ footer {
   right: -100%;
   top: 0;
   transition: right 0.4s ease-in-out;
+  visibility: hidden;
   width: 300px;
   z-index: 3;
 }
 
-#sidebar.active {
+#wrapper .active {
   right: -12.5%;
+  visibility: visible;
 }
 
 #close-sidebar {
@@ -162,7 +164,8 @@ footer {
   width: 120px;
 }
 
-.error-input {
+#create-user.error-input,
+#create-category .error-input {
   border: 2px solid #ff0000;
 }
 
@@ -299,6 +302,7 @@ main img {
   filter: brightness(70%);
   grid-column: 1;
   grid-row: 1;
+  margin: 0 auto;
 }
 
 #home-page > section:first-of-type a {
@@ -474,7 +478,7 @@ form > section p:first-of-type {
   color: #0d5f6a;
 }
 
-.create-user-errors {
+.create-errors {
   color: #ff0000;
   font-size: 14px;
   margin: -10px 0 20px 0;
@@ -485,7 +489,9 @@ form > section p:first-of-type {
 }
 
 #create-user form input,
-#create-user form select {
+#create-user form select,
+#create-category form input,
+#create-category form select {
   border-radius: 5px;
   font-size: 15px;
   margin-top: 10px;
@@ -570,11 +576,27 @@ form > section p:first-of-type {
 
 #create-category input,
 #create-category select {
+  border: 1px solid #000;
   margin-bottom: 30px;
 }
 
 #create-category input[type=submit] {
   margin: 30px 0 8rem 0;
+}
+
+#delete-category {
+  padding-bottom: 10rem;
+}
+
+#delete-category p:first-of-type {
+  margin-top: 30px;
+}
+
+#delete-category p:last-of-type {
+  border-bottom: 1px solid #0d5f6a;
+  border-top: 1px solid #0d5f6a;
+  margin: 30px 0;
+  padding: 20px 0;
 }
 
 /*** Footer ***/
@@ -617,3 +639,11 @@ footer section img {
 }
 
 /*** Viewport ***/
+
+@media screen and (min-width: 1070px) {
+
+}
+
+@media screen and (max-width: 1070px) {
+
+}

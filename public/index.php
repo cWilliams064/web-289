@@ -1,4 +1,12 @@
-<?php require_once('../private/initialize.php'); ?>
+<?php 
+
+require_once('../private/initialize.php'); 
+
+if($session->is_logged_in()) {
+  $currentUser = $session->get_user();
+}
+
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -18,14 +26,14 @@
           <li><a href="index.php">Home</a></li>
           <li><a href="recipes/index.php">Recipes</a></li>
           <li><a href="about.php">About Us</a></li>
-          <li><a href="#" id="open-sidebar">Log In</a></li>
+          <li><a href="#" id="open-sidebar"><?php echo !$session->is_logged_in() ? 'Log In' : 'View Profile'; ?></a></li>
           <li><a href="#" id="open-sidebar-icon"><img src="../public/assets/login-image.png" width="27" height="27" alt="User icon that links to login."></a></li>
         </ul>
       </nav>
-      <section>
+      <form>
         <input type="text" placeholder="Search a recipe">
-        <img src="assets/icons/search.svg" width="64" height="64" alt="Magnifying glass search icon.">
-      </section>
+        <input type="submit">
+      </form>
       <img src="assets/logo.png" width="500" height="500" alt="Pink and navy cupcake logo for Grandma's Pantry.">
     </header>
 
@@ -46,7 +54,7 @@
             <p>We inspire flavor, you create magic!</p>
             <a href="./recipes/index.php">View Our Recipes</a>
           </section>
-          <img src="assets/h1-image.png" width="1084" height="427" alt="Picnic foods with a juice pitcher on top of a wooden counter in a kitchen with the sun shining in.">
+          <img src="assets/h1-image.jpeg" width="1084" height="427" alt="Picnic foods with a juice pitcher on top of a wooden counter in a kitchen with the sun shining in.">
         </section>
         <section id="popular-categories">
           <h2>Popular Categories</h2>

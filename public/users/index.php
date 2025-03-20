@@ -24,7 +24,7 @@ $users = User::find_all();
           <li><a href="../index.php">Home</a></li>
           <li><a href="../recipes/index.php">Recipes</a></li>
           <li><a href="../about.php">About Us</a></li>
-          <li><a href="#" id="open-sidebar">Log In</a></li>
+          <li><a href="#" id="open-sidebar">View Profile</a></li>
           <li><a href="#" id="open-sidebar-icon"><img src="../assets/login-image.png" width="27" height="27" alt="User icon that links to login."></a></li>
         </ul>
       </nav>

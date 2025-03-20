@@ -69,6 +69,7 @@ if (is_post_request()) {
         <a class="back-link" href="<?php echo url_for('../public/categories/index.php'); ?>">&laquo; Back to List</a>
 
         <h1>Delete Category</h1>
+        
         <p>Are you sure you want to delete the category: </p>
         <p class="item"><?php echo h($category->name); ?></p>
 

@@ -15,9 +15,10 @@ if(is_post_request()) {
     $errors = $user->validate_login();
 
     if (empty($errors)) {
-        $foundUser = User::find_by_username($username);
-        $session->login($foundUser);
-        redirect_to(url_for('./index.php'));
+      $foundUser = User::find_by_username($username);
+      $session->login($foundUser);
+      $_SESSION['sidebar_open'] = true;
+      redirect_to(url_for('./index.php'));
     }
   }
 }
