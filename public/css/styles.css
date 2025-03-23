@@ -407,7 +407,7 @@ main img {
 #recipes-page > section {
   display: grid;
   grid-template-columns: 1fr 4fr;
-  grid-template-rows: auto auto;
+  grid-template-rows: 1fr 2fr;
   margin: auto;
   padding: 2rem;
 }
@@ -415,10 +415,11 @@ main img {
 #recipes-page > section > section:first-of-type {
   grid-column: 1;
   grid-row: 1;
-  margin-top: 2rem;
+  margin: 2rem 0;
 }
 
-#recipes-page > section > section section {
+#recipes-page > section > section:first-of-type section {
+  border-radius: 20px;
   height: 500px;
 }
 
@@ -427,15 +428,29 @@ main img {
   grid-row: 2;
 }
 
-#recipes-grid {
-  grid-column: 2 / 3;
-  grid-row: 1 / -1;
+#recipes-page > section > section:nth-child(2) section {
+  height: 300px;
 }
 
 #recipes-page section section:not(:last-of-type) section {
   border: 1px solid #808080;
   margin: 0 3rem;
   width: 250px;
+  border-radius: 20px;
+}
+
+#recipes-grid {
+  display: grid;
+  grid-column: 2 / 3;
+  grid-row: 1 / -1;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: auto;
+  padding: 2rem 0;
+  margin: 0 3rem;
+}
+
+#recipe-grid section {
+  
 }
 
 /*** About Page ***/
