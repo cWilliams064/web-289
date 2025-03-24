@@ -33,18 +33,20 @@ class Pagination {
   public function previous_link($url="") {
     $link = "";
     if($this->previous_page() != false) {
-      $link .= "<a href=\"{$url}?page={$this->previous_page()}\">";
-      $link .= "&laquo; Previous</a>";
+      $link = "<a href=\"{$url}?page={$this->previous_page()}\" id=\"previous-link\">";
+      $link .= "<span class=\"arrows\">&larr;</span> Previous</a>";
     }
+
     return $link;
   }
-
+  
   public function next_link($url="") {
     $link = "";
     if($this->next_page() != false) {
-      $link .= "<a href=\"{$url}?page={$this->next_page()}\">";
-      $link .= "Next &raquo;</a>";
+      $link = "<a href=\"{$url}?page={$this->next_page()}\" id=\"next-link\">";
+      $link .= "Next <span class=\"arrows\">&rarr;</span></a>";
     }
+
     return $link;
   }
 
@@ -52,7 +54,7 @@ class Pagination {
     $output = "";
     for($i=1; $i <= $this->total_pages(); $i++) {
       if($i == $this->currentPage) {
-        $output .= "<span class=\"selected\">{$i}</span>";
+        $output .= "<span id=\"selected-link\">{$i}</span>";
       } else {
         $output .= "<a href=\"{$url}?page={$i}\">{$i}</a>";
       }

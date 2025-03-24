@@ -33,7 +33,7 @@ class Session {
         return false;
     }
 
-    $currentUser = User::find_by_id($this->id);
+    $currentUser = User::find_by_id($this->userId);
 
     if ($currentUser) {
       settype($currentUser->roleId, 'int');
@@ -47,10 +47,10 @@ class Session {
         return false;
     }
 
-    $currentUser = User::find_by_id($this->id);
+    $currentUser = User::find_by_id($this->userId);
 
     if ($currentUser) {
-        settype($currentUser->roleId, 'int');
+      settype($currentUser->roleId, 'int');
     }
 
     return $currentUser && $currentUser->roleId === 3;
@@ -64,7 +64,7 @@ class Session {
     $current_user = User::find_by_id($this->userId);
 
     if ($current_user) {
-        settype($current_user->roleId, 'int');
+      settype($current_user->roleId, 'int');
     }
 
     return $current_user && ($current_user->roleId === 2 || $current_user->roleId === 3);

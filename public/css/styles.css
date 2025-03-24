@@ -22,6 +22,7 @@ body {
   background-color: #fff;
   display: flex;
   justify-self: center;
+  min-height: 100vh;
   padding: 4rem 0 1rem 0;
   position: relative;
   width: 80%;
@@ -435,23 +436,69 @@ main img {
 #recipes-page section section:not(:last-of-type) section {
   border: 1px solid #808080;
   margin: 0 3rem;
-  width: 250px;
+  max-width: 250px;
   border-radius: 20px;
 }
 
 #recipes-grid {
   display: grid;
+  gap: 30px;
   grid-column: 2 / 3;
   grid-row: 1 / -1;
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: auto;
   padding: 2rem 0;
-  margin: 0 3rem;
 }
 
-#recipe-grid section {
-  
+.recipe-card {
+  border: 1px solid #808080;
+  border-radius: 20px;
 }
+
+#pagination {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-column: 1 / -1;
+  justify-content: center;
+  justify-items: center;
+  margin-top: 2rem;
+  width: 100%;
+}
+
+#pagination a,
+#selected-link {
+  color: #0d5f6a;
+  display: inline-block;
+  font-size: 25px;
+  margin: 10px 15px;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+#next-link {
+  grid-column: 3;
+}
+
+#previous-link {
+  grid-column: 1;
+}
+
+#page-numbers {
+  align-items: flex-start;
+  display: flex;
+  flex-direction: row;
+  grid-column: 2;
+}
+
+#page-numbers a,
+#selected-link {
+  padding: 0 1rem 1rem 1rem;
+}
+
+#page-numbers a:last-of-type {
+  font-size: 23px;
+}
+
 
 /*** About Page ***/
 
@@ -652,20 +699,6 @@ form > section p:first-of-type {
   margin: 2rem 0 11rem 0;
 }
 
-#create-category input,
-#create-category select {
-  border: 1px solid #000;
-  margin-bottom: 30px;
-}
-
-#create-category input[type=submit] {
-  margin: 30px 0 8rem 0;
-}
-
-#delete-category {
-  padding-bottom: 10rem;
-}
-
 #delete-category p:first-of-type {
   margin-top: 30px;
 }
@@ -675,6 +708,33 @@ form > section p:first-of-type {
   border-top: 1px solid #0d5f6a;
   margin: 30px 0;
   padding: 20px 0;
+}
+
+#create-category input,
+#create-category select {
+  border: 1px solid #000;
+  margin-bottom: 30px;
+}
+
+#create-category input[type=submit],
+#delete-category input[type=submit] {
+  margin: 30px 0;
+}
+
+#edit-user h1,
+#create-category h1,
+#delete-category h1 {
+  margin-top: 5rem;
+}
+
+#manage-users,
+#manage-category,
+#create-user,
+#create-category,
+#edit-user,
+#delete-user,
+#delete-category {
+  padding: 3rem 4rem 0 4rem;
 }
 
 /*** Footer ***/

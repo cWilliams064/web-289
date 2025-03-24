@@ -16,7 +16,6 @@ if(is_post_request() && isset($_POST['login'])) {
     $foundUser = User::find_by_username($username);
     $session->login($foundUser);
     $_SESSION['sidebar_open'] = true;
-    redirect_to(url_for('./index.php'));
   }
 }
 

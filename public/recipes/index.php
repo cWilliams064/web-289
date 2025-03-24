@@ -19,7 +19,7 @@ $recipes = Recipe::find_by_sql($sql);
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>Manage Users</title>
+    <title>Recipes</title>
     <script src="../js/app.js" defer></script>
     <link href="../favicon.ico" rel="icon">
     <link href="../css/styles.css" rel="stylesheet">
@@ -27,7 +27,7 @@ $recipes = Recipe::find_by_sql($sql);
   </head>
 
   <body>
-  <header role="banner">
+    <header role="banner">
       <nav>
         <ul>
           <li><a href="../index.php">Home</a></li>
@@ -73,12 +73,35 @@ $recipes = Recipe::find_by_sql($sql);
           </section>
           <section id="recipes-grid">
             <?php foreach ($recipes as $recipe) : ?>
-            <section id="recipe-card">
+            <section class="recipe-card">
               <h3><?= h($recipe->recipeName); ?></h3>
+              <img src="<?= h($recipe->get_recipe_photo()); ?>" alt="Recipe final product food image.">
               <p><?= h($recipe->recipeDescription); ?></p>
               <a href="./show.php?id=<?= $recipe->id; ?>">View Recipe</a>
             </section>
             <?php endforeach; ?>
+            <?php 
+              if($pagination->total_pages() > 1) {
+                echo "<section id=\"pagination\">";
+
+                $url = url_for('/recipes/index.php');
+                echo $pagination->previous_link($url);
+
+                echo "<section id=\"page-numbers\">";
+                for($i=1; $i <= $pagination->total_pages(); $i++) {
+                  if($i == $pagination->currentPage) {
+                    echo "<span id=\"selected-link\">{$i}</span>";
+                  } else {
+                    echo "<a href=\"{$url}?page={$i}\">{$i}</a>";
+                  }
+                }
+                echo "</section>";
+
+                echo $pagination->next_link($url);
+
+                echo "</section>";
+              }
+            ?>
           </section>
         </section>
       </main>

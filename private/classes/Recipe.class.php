@@ -27,6 +27,14 @@ class Recipe extends DatabaseObject {
     return !empty($result) ? array_shift($result) : false;
   }
 
+  public function get_recipe_photo() {
+    $sql = "SELECT img_path FROM recipe_photos WHERE recipe_id = '" . self::$database->escape_string($this->id) . "' LIMIT 1";
+    $result = self::$database->query($sql);
+    $photo = $result->fetch_assoc();
+
+    return $photo ? $photo['img_path'] : 'default.jpg';
+  }
+
   protected function validate_recipe() {
     $this->errors = [];
   

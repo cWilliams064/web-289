@@ -1,14 +1,6 @@
 <?php 
 
 require_once('../../private/initialize.php');
-
-global $session;
-
-if ($msg = $session->message()) {
-  echo "<section id='access-error'>{$msg}</section>";
-  $session->message(""); // Clear message after displaying
-}
-
 require_admin_or_super_admin();
 
 $id = $_GET['id'] ?? false;
@@ -34,15 +26,15 @@ $viewUser = User::find_by_id($id);
           <li><a href="../index.php">Home</a></li>
           <li><a href="../recipes/index.php">Recipes</a></li>
           <li><a href="../about.php">About Us</a></li>
-          <li><a href="#" id="open-sidebar">Log In</a></li>
+          <li><a href="#" id="open-sidebar"><?php echo !$session->is_logged_in() ? 'Log In' : 'View Profile'; ?></a></li>
           <li><a href="#" id="open-sidebar-icon"><img src="../assets/login-image.png" width="27" height="27" alt="User icon that links to login."></a></li>
         </ul>
       </nav>
       <form>
         <input type="text" placeholder="Search a recipe">
-        <button><img src="../public/assets/icons/search.svg" width="64" height="64" alt="Magnifying glass submit icon."></button>
+        <button><img src="../assets/icons/search.svg" width="64" height="64" alt="Magnifying glass submit icon."></button>
       </form>
-      <img src="../assets/logo.png" width="500" height="500" alt="Pink and navy cupcake logo for Grandma's Pantry.">
+      <a href=""><img src="../assets/logo.png" width="500" height="500" alt="Pink and navy cupcake logo for Grandma's Pantry."></a>
     </header>
 
     <div id="wrapper">
