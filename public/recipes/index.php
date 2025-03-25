@@ -3,15 +3,38 @@
 require_once('../../private/initialize.php');
 
 $currentPage = $_GET['page'] ?? 1;
+$searchQuery = $_GET['search-query'] ?? '';
 $perPage = 12;
 $totalCount = Recipe::count_all();
 
+if ($searchQuery) {
+  $sql = "SELECT COUNT(*) FROM recipes WHERE recipe_name LIKE '%{$searchQuery}%'";
+  $totalCount = Recipe::count_all($sql);
+} else {
+  $totalCount = Recipe::count_all();
+}
+
 $pagination = new Pagination($currentPage, $perPage, $totalCount);
 
-$sql = "SELECT * FROM recipes ";
-$sql .= "LIMIT {$perPage} ";
-$sql .= "OFFSET {$pagination->offset()}";
+
+if ($searchQuery) {
+  $sql = "SELECT * FROM recipes WHERE recipe_name ";
+  $sql .= "LIKE '%{$searchQuery}%' LIMIT {$perPage} ";
+  $sql .= "OFFSET {$pagination->offset()}"; 
+} else {
+  $sql = "SELECT * FROM recipes ";
+  $sql .= "LIMIT {$perPage} OFFSET {$pagination->offset()}";
+}
+
 $recipes = Recipe::find_by_sql($sql);
+
+if (isset($_GET['search-query'])) {
+  $sql = "SELECT * FROM recipes ";
+  $sql .= "WHERE recipe_name LIKE '%{$searchQuery}%' ";
+  $sql .= "LIMIT {$perPage} OFFSET {$pagination->offset()}";
+
+  $recipes = Recipe::find_by_sql($sql);
+}
 
 ?>
 
@@ -37,8 +60,8 @@ $recipes = Recipe::find_by_sql($sql);
           <li><a href="#" id="open-sidebar-icon"><img src="../assets/login-image.png" width="27" height="27" alt="User icon that links to login."></a></li>
         </ul>
       </nav>
-      <form>
-        <input type="text" placeholder="Search a recipe">
+      <form action="index.php" method="GET">
+        <input type="text" name="search-query" value="<?= h($searchQuery); ?>" placeholder="Search a recipe">
         <button><img src="../assets/icons/search.svg" width="64" height="64" alt="Magnifying glass submit icon."></button>
       </form>
       <a href=""><img src="../assets/logo.png" width="500" height="500" alt="Pink and navy cupcake logo for Grandma's Pantry."></a>
@@ -75,16 +98,17 @@ $recipes = Recipe::find_by_sql($sql);
             <?php foreach ($recipes as $recipe) : ?>
             <section class="recipe-card">
               <h3><?= h($recipe->recipeName); ?></h3>
-              <img src="<?= h($recipe->get_recipe_photo()); ?>" alt="Recipe final product food image.">
-              <p><?= h($recipe->recipeDescription); ?></p>
-              <a href="./show.php?id=<?= $recipe->id; ?>">View Recipe</a>
+              <img src="<?= h(url_for($recipe->get_recipe_photo())); ?>" alt="<?= h($recipe->recipeName); ?>">
+              <div id="card-details">
+                <p>Serving Size: <?= h($recipe->servings); ?></p>
+                <a href="./show.php?id=<?= $recipe->id; ?>">View Recipe</a>
+            </div>
             </section>
             <?php endforeach; ?>
             <?php 
               if($pagination->total_pages() > 1) {
                 echo "<section id=\"pagination\">";
-
-                $url = url_for('/recipes/index.php');
+                
                 echo $pagination->previous_link($url);
 
                 echo "<section id=\"page-numbers\">";

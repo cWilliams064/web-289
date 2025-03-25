@@ -16,7 +16,7 @@ class DatabaseObject {
     $sql = "SELECT COUNT(*) FROM " . static::$table_name;
     $resultSet = self::$database->query($sql);
     $row = $resultSet->fetch_array();
-    return array_shift($row);
+    return (int) array_shift($row);
   }
 
   static public function find_all() {

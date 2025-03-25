@@ -6,7 +6,7 @@ class Pagination {
   public $perPage;
   public $totalCount;
 
-  public function __construct($page=1, $perPage=20, $totalCount=0) {
+  public function __construct($page=1, $perPage=12, $totalCount=0) {
     $this->currentPage = (int) $page;
     $this->perPage = (int) $perPage;
     $this->totalCount = (int) $totalCount;

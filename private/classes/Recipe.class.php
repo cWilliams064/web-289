@@ -19,6 +19,23 @@ class Recipe extends DatabaseObject {
     $this->createdAt = $args['created_at'] ?? '';
   }
 
+  static protected function instantiate($record) {
+    $object = new static;
+
+    if (isset($record['recipe_id'])) {
+      $object->id = $record['recipe_id'];
+    }
+
+    foreach($record as $property => $value) {
+      $camelCaseProperty = lcfirst(str_replace('_', '', ucwords($property, '_')));
+
+      if(property_exists($object, $camelCaseProperty) && $property !== 'recipe_id') {
+        $object->$camelCaseProperty = $value;
+      }
+    }
+    return $object;
+  }
+
   static public function find_by_recipe_name($recipeName) {
     $sql = "SELECT * FROM " . static::$table_name . " ";
     $sql .= "WHERE recipe_name = '" . self::$database->escape_string($recipeName) . "' ";
@@ -28,11 +45,11 @@ class Recipe extends DatabaseObject {
   }
 
   public function get_recipe_photo() {
-    $sql = "SELECT img_path FROM recipe_photos WHERE recipe_id = '" . self::$database->escape_string($this->id) . "' LIMIT 1";
+    $sql = "SELECT img_path FROM recipe_photos WHERE recipe_id = '" . $this->id . "' LIMIT 1";
     $result = self::$database->query($sql);
     $photo = $result->fetch_assoc();
-
-    return $photo ? $photo['img_path'] : 'default.jpg';
+    
+    return $photo ? $photo['img_path'] : '/assets/recipe-images/default-recipe-image.jpg';
   }
 
   protected function validate_recipe() {
