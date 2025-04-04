@@ -3,35 +3,30 @@
 require_once('../../private/initialize.php');
 
 $currentPage = $_GET['page'] ?? 1;
-$searchQuery = $_GET['search-query'] ?? '';
 $perPage = 12;
-$totalCount = Recipe::count_all();
 
-if ($searchQuery) {
-  $sql = "SELECT COUNT(*) FROM recipes WHERE recipe_name LIKE '%{$searchQuery}%'";
-  $totalCount = Recipe::count_all($sql);
+if (!empty($_GET['search-query'])) {
+  $totalCount = Recipe::count_filtered($_GET['search-query']);
 } else {
   $totalCount = Recipe::count_all();
 }
 
+
 $pagination = new Pagination($currentPage, $perPage, $totalCount);
 
-
-if ($searchQuery) {
-  $sql = "SELECT * FROM recipes WHERE recipe_name ";
-  $sql .= "LIKE '%{$searchQuery}%' LIMIT {$perPage} ";
-  $sql .= "OFFSET {$pagination->offset()}"; 
-} else {
-  $sql = "SELECT * FROM recipes ";
-  $sql .= "LIMIT {$perPage} OFFSET {$pagination->offset()}";
-}
-
-$recipes = Recipe::find_by_sql($sql);
-
 if (isset($_GET['search-query'])) {
+  $searchQuery = $_GET['search-query'];
+  $escapedSearchQuery = $database->escape_string($searchQuery);
+
   $sql = "SELECT * FROM recipes ";
   $sql .= "WHERE recipe_name LIKE '%{$searchQuery}%' ";
   $sql .= "LIMIT {$perPage} OFFSET {$pagination->offset()}";
+
+  $recipes = Recipe::find_by_sql($sql);
+} else {
+  $sql = "SELECT * FROM recipes ";
+  $sql .= "LIMIT {$perPage} ";
+  $sql .= "OFFSET {$pagination->offset()}";
 
   $recipes = Recipe::find_by_sql($sql);
 }
@@ -60,8 +55,8 @@ if (isset($_GET['search-query'])) {
           <li><a href="#" id="open-sidebar-icon"><img src="../assets/login-image.png" width="27" height="27" alt="User icon that links to login."></a></li>
         </ul>
       </nav>
-      <form action="index.php" method="GET">
-        <input type="text" name="search-query" value="<?= h($searchQuery); ?>" placeholder="Search a recipe">
+      <form  action="<?= $_SERVER['PHP_SELF'] ?>" method="GET">
+        <input type="text" name="search-query" placeholder="Search a recipe" value="">
         <button><img src="../assets/icons/search.svg" width="64" height="64" alt="Magnifying glass submit icon."></button>
       </form>
       <a href=""><img src="../assets/logo.png" width="500" height="500" alt="Pink and navy cupcake logo for Grandma's Pantry."></a>
@@ -81,52 +76,57 @@ if (isset($_GET['search-query'])) {
         <h1>Recipes</h1>
 
         <section>
-          <section>
+          <div>
             <section>
-              <h2>Filters</h2>
-              <form>
-              </form>
+              <section>
+                <h2>Filters</h2>
+                <form>
+                </form>
+              </section>
             </section>
-          </section>
-          <section>
             <section>
-              <p>Become a member to post your recipe!</p>
-              <a href="../sign-up.php">Sign Up for Free Now</a>
+              <section>
+                <p>Become a member to post your recipe!</p>
+                <a href="../sign-up.php">Sign Up for Free Now</a>
+              </section>
             </section>
-          </section>
+          </div>
           <section id="recipes-grid">
             <?php foreach ($recipes as $recipe) : ?>
             <section class="recipe-card">
               <h3><?= h($recipe->recipeName); ?></h3>
-              <img src="<?= h(url_for($recipe->get_recipe_photo())); ?>" alt="<?= h($recipe->recipeName); ?>">
-              <div id="card-details">
-                <p>Serving Size: <?= h($recipe->servings); ?></p>
-                <a href="./show.php?id=<?= $recipe->id; ?>">View Recipe</a>
-            </div>
+              <img src="<?= h($recipe->get_recipe_photo()); ?>" alt="Recipe final product food image.">
+              <p><?= h($recipe->recipeDescription); ?></p>
+              <a href="./show.php?id=<?= $recipe->id; ?>">View Recipe</a>
             </section>
             <?php endforeach; ?>
-            <?php 
+          </section>
+          <?php 
               if($pagination->total_pages() > 1) {
                 echo "<section id=\"pagination\">";
-                
-                echo $pagination->previous_link($url);
+
+                $url = url_for('/recipes/index.php');
+                $searchString = isset($_GET['search-query']) ? "&search-query=" . urlencode($_GET['search-query']) : '';
+
+                echo $pagination->previous_link("{$url}?page=" . ($pagination->currentPage - 1) . $searchString);
 
                 echo "<section id=\"page-numbers\">";
                 for($i=1; $i <= $pagination->total_pages(); $i++) {
-                  if($i == $pagination->currentPage) {
+                  $link = "{$url}?page={$i}{$searchString}";
+                  
+                  if ($i == $pagination->currentPage) {
                     echo "<span id=\"selected-link\">{$i}</span>";
                   } else {
-                    echo "<a href=\"{$url}?page={$i}\">{$i}</a>";
+                    echo "<a href=\"{$link}\">{$i}</a>";
                   }
                 }
                 echo "</section>";
 
-                echo $pagination->next_link($url);
+                echo $pagination->next_link("{$url}?page=" . ($pagination->currentPage + 1) . $searchString);
 
                 echo "</section>";
               }
             ?>
-          </section>
         </section>
       </main>
     </div>

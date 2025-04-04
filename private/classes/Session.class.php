@@ -15,12 +15,11 @@ class Session {
 
   public function login($user) {
     if($user) {
-      session_regenerate_id();
+      session_regenerate_id(true);
       $this->userId = $_SESSION['userId'] = $user->id;
       $this->username = $_SESSION['username'] = $user->username;
       $this->lastLogin = $_SESSION['lastLogin'] = time();
     }
-
     return true;
   }
 

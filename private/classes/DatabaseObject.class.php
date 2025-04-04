@@ -12,13 +12,6 @@ class DatabaseObject {
     self::$database = $database;
   }
 
-  static public function count_all() {
-    $sql = "SELECT COUNT(*) FROM " . static::$table_name;
-    $resultSet = self::$database->query($sql);
-    $row = $resultSet->fetch_array();
-    return (int) array_shift($row);
-  }
-
   static public function find_all() {
     $sql = "SELECT * FROM " . static::$table_name;
     return static::find_by_sql($sql);
@@ -30,7 +23,7 @@ class DatabaseObject {
       exit("Database query failed.");
     }
     
-    $obj_array = [];
+    $obj_array = [];  
     while($record = $result->fetch_assoc()) {
       $obj_array[] = static::instantiate($record);
     }

@@ -70,7 +70,7 @@ else {
             <p>= required</p>
           </section>
           <?php include('users/form-fields.php') ?>
-          <input type="submit" id="signup-submit" name="submit" value="Create Account">
+          <input type="submit" id="signup-submit" name="signup" value="Create Account">
         </form>
         <p>Already have an account? <a href="#" id="signup-login-link">Log in</a></p>
       </main>

@@ -1,12 +1,4 @@
-<?php 
-
-require_once('../private/initialize.php'); 
-
-if($session->is_logged_in()) {
-  $currentUser = $session->get_user();
-}
-
-?>
+<?php require_once('../private/initialize.php'); ?>
 
 <!DOCTYPE html>
 <html lang="en">

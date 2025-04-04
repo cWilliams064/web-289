@@ -83,13 +83,13 @@ class User extends DatabaseObject {
     global $session;
     $lastLogin = $session->get_last_login();
     if ($lastLogin && strtotime($lastLogin) < strtotime('-30 days')) {
-        $this->activity = 0;
+      $this->activity = 0;
     }
   }
 
   static public function find_by_username($username) {
     $sql = "SELECT * FROM " . static::$table_name;
-    $sql .= " WHERE username='" . self::$database->escape_string($username) . "'";
+    $sql .= " WHERE username = '" . static::$database->escape_string($username) . "'";
     $obj_array = static::find_by_sql($sql);
 
     if(!empty($obj_array)) {

@@ -16,6 +16,14 @@ class Pagination {
     return $this->perPage * ($this->currentPage - 1);
   }
 
+  private function build_url($url, $page) {
+    $queryParams = $_GET;
+    $queryParams['page'] = $page;
+    $baseUrl = strtok($url, '?');
+
+    return $baseUrl . '?' . http_build_query($queryParams);
+  }
+
   public function total_pages() {
     return ceil($this->totalCount / $this->perPage);
   }
@@ -32,8 +40,10 @@ class Pagination {
 
   public function previous_link($url="") {
     $link = "";
-    if($this->previous_page() != false) {
-      $link = "<a href=\"{$url}?page={$this->previous_page()}\" id=\"previous-link\">";
+    $prevPage = $this->previous_page();
+    
+    if($prevPage) {
+      $link = "<a href=\"" . $this->build_url($url, $prevPage) . "\" id=\"previous-link\">";
       $link .= "<span class=\"arrows\">&larr;</span> Previous</a>";
     }
 
@@ -42,8 +52,10 @@ class Pagination {
   
   public function next_link($url="") {
     $link = "";
-    if($this->next_page() != false) {
-      $link = "<a href=\"{$url}?page={$this->next_page()}\" id=\"next-link\">";
+    $nextPage = $this->next_page();
+
+    if($nextPage) {
+      $link = "<a href=\"" . $this->build_url($url, $nextPage) . "\" id=\"next-link\">";
       $link .= "Next <span class=\"arrows\">&rarr;</span></a>";
     }
 
@@ -52,17 +64,35 @@ class Pagination {
 
   public function number_links($url="") {
     $output = "";
-    for($i=1; $i <= $this->total_pages(); $i++) {
-      if($i == $this->currentPage) {
-        $output .= "<span id=\"selected-link\">{$i}</span>";
-      } else {
-        $output .= "<a href=\"{$url}?page={$i}\">{$i}</a>";
+    $totalPages = $this->total_pages();
+
+    if ($totalPages <= 5) {
+      for($i=1; $i <= $totalPages; $i++) {
+        $output .= $this->number_page_link($url, $i);
+      }
+    } else {
+
+      for ($i = 1; $i <= 5; $i++) {
+        $output .= $this->number_page_link($url, $i);
+      }
+
+      if ($totalPages > 5) {
+        $output .= "<span>...</span>";
       }
     }
+
     return $output;
   }
 
-  public function page_links($url) {
+  private function number_page_link($url, $i) {
+    if($i == $this->currentPage) {
+      return "<span id=\"selected-link\">{$i}</span>";
+    } else {
+      return "<a href=\"" . $this->build_url($url, $i) . "\">{$i}</a>";
+    }
+  }
+
+  public function all_page_links($url) {
     $output = "";
     if($this->total_pages() > 1) {
       $output .= "<div class=\"pagination\">";
