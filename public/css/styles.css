@@ -43,11 +43,15 @@ header {
 }
 
 header form {
-  align-items: center;
-  display: flex;
-  justify-content: center;
+  align-content: center;
   grid-column: 1;
   grid-row: 1;
+}
+
+header form > section {
+  display: flex;
+  justify-content: center;
+  position: relative;
 }
 
 header > form input {
@@ -74,6 +78,18 @@ header form button img {
   height: auto;
   margin-bottom: 10px;
   width: 35px;
+}
+
+#search-dropdown {
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-top: none;
+  left: 6.5rem;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  top: 2rem;
+  width: 350px;
+  z-index: 10;
 }
 
 header > a {
@@ -424,18 +440,42 @@ main img {
   padding: 2rem 0;
 }
 
-#recipes-page div > section:nth-of-type(1) section {
+#filters {
+  align-items: center;
   background-color: #0d5f6a;
+  display: flex;
+  flex-direction: column;
+  height: 500px;
 }
 
-#recipes-page div > section:nth-of-type(1) h2 {
+#filters h2 {
   color: #fff;
   text-align: center;
 }
 
-#recipes-page div > section:nth-of-type(1) section {
-  border-radius: 20px;
-  height: 500px;
+#filters form {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+#filters form label {
+  margin-bottom: -10px;
+}
+
+#diet-type {
+  margin-bottom: 1rem;
+}
+
+#filter form > section:last-of-type {
+  margin-top: 1rem;
+}
+
+#filters form input[type="submit"] {
+  border: 1px solid #808080;
+  border-radius: 10px;
+  margin-top: 2rem;
+  padding: 6px;
 }
 
 #recipes-page div > section:nth-of-type(2) {
@@ -443,20 +483,21 @@ main img {
   grid-row: 2;
 }
 
-#recipes-page div > section:nth-of-type(2) section {
+#recipes-page div > section:nth-of-type(2) > section {
   display: flex;
   flex-direction: column;
   gap: 1rem;
   height: 300px;
-  padding: 2rem 1rem 0 1rem;
+  padding: 1rem 2rem 0 2rem;
   text-align: center;
 }
 
 #recipes-page div > section:last-of-type a {
   color: #0d5f6a;
+  font-size: 20px;
 }
 
-#recipes-page div section section {
+#recipes-page div section > section {
   border: 1px solid #808080;
   border-radius: 20px;
 }
@@ -525,7 +566,7 @@ main img {
   display: inline-block;
   font: 25px 'IBM Plex Sans', Arial, sans-serif;
   margin: 10px 15px;
-  padding: .5rem 1rem;
+  padding: 5px 13px;
   text-decoration: none;
   white-space: nowrap;
 }
@@ -555,7 +596,7 @@ main img {
 #about-page {
   display: grid;
   grid-template-columns: 1fr 1.5fr;
-  grid-template-rows: repeat(3, min-content);
+  grid-template-rows: repeat(4, min-content);
   margin: 2rem 4rem;
 }
 
@@ -564,13 +605,13 @@ main img {
   grid-column: 1;
   grid-row: 1;
   height: min-content;
-  margin: 0 0 3rem 0;
   padding-bottom: 1rem;
   width: 160px;
 }
 
 #about-page > section {
   height: min-content;
+  margin-top: 2rem;
 }
 
 #about-page section:first-of-type {
@@ -578,15 +619,20 @@ main img {
   grid-row: 2;
 }
 
-#about-page section:last-of-type {
+#about-page section:nth-of-type(2) {
   grid-column: 1;
   grid-row: 3;
 }
 
+#about-page section:last-of-type {
+  grid-column: 1;
+  grid-row: 4;
+}
+
 #about-page img {
+  align-self: flex-end;
   grid-column: 2;
-  grid-row: 2 / 4;
-  margin-left: 8rem;
+  grid-row: 2 / 5;
 }
 
 #about-page a {

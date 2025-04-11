@@ -19,7 +19,7 @@ if (isset($_GET['search-query'])) {
   $escapedSearchQuery = $database->escape_string($searchQuery);
 
   $sql = "SELECT * FROM recipes ";
-  $sql .= "WHERE recipe_name LIKE '%{$searchQuery}%' ";
+  $sql .= "WHERE recipe_name LIKE '%{$escapedSearchQuery}%' ";
   $sql .= "LIMIT {$perPage} OFFSET {$pagination->offset()}";
 
   $recipes = Recipe::find_by_sql($sql);
@@ -56,8 +56,19 @@ if (isset($_GET['search-query'])) {
         </ul>
       </nav>
       <form  action="<?= $_SERVER['PHP_SELF'] ?>" method="GET">
-        <input type="text" name="search-query" placeholder="Search a recipe" value="">
-        <button><img src="../assets/icons/search.svg" width="64" height="64" alt="Magnifying glass submit icon."></button>
+        <section>
+          <input type="text" name="search-query" placeholder="Search a recipe" value="<?php echo isset($_GET['search-query']) ? $escapedSearchQuery : ''; ?>">
+          <button>
+            <img src="../assets/icons/search.svg" width="64" height="64" alt="Magnifying glass submit icon.">
+          </button>
+          <section id="search-dropdown">
+            <div>Chocolate Cake</div>
+            <div>Mac & Cheese</div>
+            <div>Apple Pie</div>
+            <div>Tuna Casserole</div>
+            <div>Fried Rice</div>
+          </section>
+        </section>
       </form>
       <a href=""><img src="../assets/logo.png" width="500" height="500" alt="Pink and navy cupcake logo for Grandma's Pantry."></a>
     </header>
@@ -78,15 +89,55 @@ if (isset($_GET['search-query'])) {
         <section>
           <div>
             <section>
-              <section>
+              <section id="filters">
                 <h2>Filters</h2>
                 <form>
+                  <label for="meal-type">Type:</label><br>
+                  <select id="meal-type" name="meal-type">
+                    <option value="" selected disabled>All</option>
+                    <option>Breakfast</option>
+                    <option>Lunch</option>
+                    <option>Dinner</option>
+                    <option>Snack</option>
+                    <option>Dessert</option>
+                  </select><br>
+                  <label for="style-type">Style:</label><br>
+                  <select id="style-type" name="style-type">
+                    <option value="" selected disabled>All</option>
+                    <option>Italian</option>
+                    <option>Cuban</option>
+                    <option>Thai</option>
+                    <option>Fusion</option>
+                    <option>American</option>
+                    <option>Mexican</option>
+                    <option>Chinese</option>
+                  </select><br>
+                  <label for="diet-type">Diet:</label><br>
+                  <select id="diet-type" name="diet-type">
+                  <option>Vegan</option>
+                    <option value="" selected disabled>All</option>
+                    <option>Vegetarian</option>
+                    <option>Gluten-Free</option>
+                    <option>Whole Food</option>
+                    <option>Raw</option>
+                    <option>Sugar-Free</option>
+                    <option>Paleo</option>
+                  </select>
+                  <section>
+                    <label>Newest:</label>
+                    <input type="checkbox">
+                  </section>
+                  <section>
+                    <label>Highest Rating:</label>
+                    <input type="checkbox">
+                  </section>
+                  <input type="submit" name="fliters" value="Filter Recipes">
                 </form>
               </section>
             </section>
             <section>
               <section>
-                <p>Become a member to post your recipe!</p>
+                <h2>Become a member to post your recipe!</h2>
                 <a href="../sign-up.php">Sign Up for Free Now</a>
               </section>
             </section>

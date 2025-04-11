@@ -22,9 +22,14 @@
           <li><a href="#" id="open-sidebar-icon"><img src="../public/assets/login-image.png" width="27" height="27" alt="User icon that links to login."></a></li>
         </ul>
       </nav>
-      <form>
-        <input type="text" placeholder="Search a recipe">
-        <button><img src="../public/assets/icons/search.svg" width="64" height="64" alt="Magnifying glass submit icon."></button>
+      <form  action="<?= $_SERVER['PHP_SELF'] ?>" method="GET">
+        <section>
+          <input type="text" name="search-query" placeholder="Search a recipe" value="<?php echo isset($_GET['search-query']) ? $escapedSearchQuery : ''; ?>">
+          <button>
+            <img src="assets/icons/search.svg" width="64" height="64" alt="Magnifying glass submit icon.">
+          </button>
+          <section id="search-dropdown"></section>
+        </section>
       </form>
       <a href=""><img src="assets/logo.png" width="500" height="500" alt="Pink and navy cupcake logo for Grandma's Pantry."></a>
     </header>
@@ -46,11 +51,16 @@
           <p>At Grandma's Pantry, we believe that the kitchen is the heart of every home. Our journey began with a simple idea: to preserve the warmth and love that comes from sharing recipes passed down through generations.</p>
         </section>
         <section>
+          <h2>Our Passion</h2>
+          <p>Food has a special way of bringing people together, and that's what drives everything we do. At Grandma's Pantry, we're passionate about sharing recipes that spark memories, create new traditions, and make every meal feel like home.</p>
+          <p>From timeless classics to fresh new favorites, our growing collection is here to inspire every cook—no matter your skill level. We believe that a well-loved recipe is a story worth passing on, and we’re honored to be part of your kitchen journey.</p>
+        </section>
+        <section>
           <h2>Contact Us</h2>
           <p>We'd love to hear from you! Whether you have a question about a recipe, a suggestion for new content, or just want to share your cooking success stories, we're here to connect. </p>
           <p>Drop us an email at <a href="mailto:contact@Grandmaspantry.com">contact@Grandmaspantry.com</a>, and we'll get back to you as soon as possible.</p>
         </section>
-        <img src="assets/candy.png" width="369" height="566" alt="Macaroons and various candy on a long table in front of a window.">
+        <img src="assets/about-page-photo.png" width="1000" height="1000" alt="Macaroons and various candy on a long table in front of a window.">
       </main>
     </div>
     <footer>
