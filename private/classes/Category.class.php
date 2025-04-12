@@ -17,6 +17,23 @@ class Category extends DatabaseObject {
 				$this->category_type = $args['category_type'];
 		}
 	}
+
+  static protected function instantiate($record) {
+		$object = new static;
+
+		if (isset($record['meal_type_id'])) {
+				$object->id = $record['meal_type_id'];
+				$object->name = $record['meal_type_name'];
+		} elseif (isset($record['ethnic_type_id'])) {
+				$object->id = $record['ethnic_type_id'];
+				$object->name = $record['ethnic_type_name'];
+		} elseif (isset($record['diet_type_id'])) {
+				$object->id = $record['diet_type_id'];
+				$object->name = $record['diet_type_name'];
+		}
+
+		return $object;
+	}
 	
 	static public function set_table($table) {
 		static::$table_name = $table;
@@ -54,8 +71,29 @@ class Category extends DatabaseObject {
       return $category;
     }
         
-      return false;
+    return false;
+  }
+
+  public static function get_all_names($table) {
+    static::set_table($table);
+
+    $name_column = static::$db_columns[1];
+    $sql = "SELECT {$name_column} FROM " . static::$table_name;
+    $sql .= " ORDER BY {$name_column} ASC";
+
+    $result = self::$database->query($sql);
+    $names = [];
+
+    if ($result) {
+      while ($row = $result->fetch_assoc()) {
+        $names[] = $row[$name_column];
+      }
+      $result->free();
     }
+
+    return $names;
+  }
+
 
 	protected function create() {
 		$this->validate_category();
@@ -85,23 +123,6 @@ class Category extends DatabaseObject {
 
     return $sanitized;
   }
-
-	static protected function instantiate($record) {
-		$object = new static;
-
-		if (isset($record['meal_type_id'])) {
-				$object->id = $record['meal_type_id'];
-				$object->name = $record['meal_type_name'];
-		} elseif (isset($record['ethnic_type_id'])) {
-				$object->id = $record['ethnic_type_id'];
-				$object->name = $record['ethnic_type_name'];
-		} elseif (isset($record['diet_type_id'])) {
-				$object->id = $record['diet_type_id'];
-				$object->name = $record['diet_type_name'];
-		}
-
-		return $object;
-	}
 
 	public function validate_category() {
     $this->errors = [];

@@ -5,12 +5,15 @@ require_once('../../private/initialize.php');
 $currentPage = $_GET['page'] ?? 1;
 $perPage = 12;
 
+$mealTypes = Category::get_all_names('meal_types');
+$ethnicTypes = Category::get_all_names('ethnic_types');
+$dietTypes = Category::get_all_names('diet_types');
+
 if (!empty($_GET['search-query'])) {
   $totalCount = Recipe::count_filtered($_GET['search-query']);
 } else {
   $totalCount = Recipe::count_all();
 }
-
 
 $pagination = new Pagination($currentPage, $perPage, $totalCount);
 
@@ -62,11 +65,7 @@ if (isset($_GET['search-query'])) {
             <img src="../assets/icons/search.svg" width="64" height="64" alt="Magnifying glass submit icon.">
           </button>
           <section id="search-dropdown">
-            <div>Chocolate Cake</div>
-            <div>Mac & Cheese</div>
-            <div>Apple Pie</div>
-            <div>Tuna Casserole</div>
-            <div>Fried Rice</div>
+            
           </section>
         </section>
       </form>
@@ -95,43 +94,34 @@ if (isset($_GET['search-query'])) {
                   <label for="meal-type">Type:</label><br>
                   <select id="meal-type" name="meal-type">
                     <option value="" selected disabled>All</option>
-                    <option>Breakfast</option>
-                    <option>Lunch</option>
-                    <option>Dinner</option>
-                    <option>Snack</option>
-                    <option>Dessert</option>
+                    <?php foreach($mealTypes as $type): ?>
+                      <option><?= h($type) ?></option>
+                    <?php endforeach; ?>
                   </select><br>
                   <label for="style-type">Style:</label><br>
                   <select id="style-type" name="style-type">
                     <option value="" selected disabled>All</option>
-                    <option>Italian</option>
-                    <option>Cuban</option>
-                    <option>Thai</option>
-                    <option>Fusion</option>
-                    <option>American</option>
-                    <option>Mexican</option>
-                    <option>Chinese</option>
+                    <?php foreach($ethnicTypes as $type): ?>
+                      <option><?= h($type) ?></option>
+                    <?php endforeach; ?>
                   </select><br>
                   <label for="diet-type">Diet:</label><br>
                   <select id="diet-type" name="diet-type">
                   <option>Vegan</option>
                     <option value="" selected disabled>All</option>
-                    <option>Vegetarian</option>
-                    <option>Gluten-Free</option>
-                    <option>Whole Food</option>
-                    <option>Raw</option>
-                    <option>Sugar-Free</option>
-                    <option>Paleo</option>
+                    <?php foreach($dietTypes as $type): ?>
+                      <option><?= h($type) ?></option>
+                    <?php endforeach; ?>
                   </select>
                   <section>
-                    <label>Newest:</label>
-                    <input type="checkbox">
+                    <label for="newest">Newest:</label>
+                    <input type="checkbox" id="newest" name="newest">
                   </section>
                   <section>
-                    <label>Highest Rating:</label>
-                    <input type="checkbox">
+                    <label for="highest-rating">Highest Rating:</label>
+                    <input type="checkbox" id="highest-rating" name="highest-rating">
                   </section>
-                  <input type="submit" name="fliters" value="Filter Recipes">
+                  <input type="submit" name="fliters" value="Apply Filters">
                 </form>
               </section>
             </section>

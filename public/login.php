@@ -44,14 +44,14 @@ if(is_post_request() && isset($_POST['login'])) {
     <form action="<?= $_SERVER['PHP_SELF'] ?>" method="POST">
       <section>
         <label for="login-username">Username:</label><br>
-        <input type="text" id="login-username" class="<?= isset($loginErrors['username']) ? 'error-input' : ''; ?>" name="username" value="<?= $username ?>" required><br>
+        <input type="text" id="login-username" class="<?= isset($loginErrors['username']) ? 'error-input' : ''; ?>" name="username" value="<?= $username ?>" autocomplete="on"><br>
         <?php if (!empty($loginErrors['username'])): ?>
           <?= '<p class="user-errors">' . $loginErrors['username'] . '</p>'; ?>
         <?php endif; ?>
       </section>
       <section>
         <label for="login-password" id="password-label">Password:</label><br>
-        <input type="password" id="login-password" class="<?= isset($loginErrors['password']) ? 'error-input' : ''; ?>" name="password" required><br>
+        <input type="password" id="login-password" class="<?= isset($loginErrors['password']) ? 'error-input' : ''; ?>" name="password" autocomplete="off" required><br>
         <?php if (!empty($loginErrors['password'])): ?>
           <?= '<p class="user-errors">' . $loginErrors['password'] . '</p>'; ?>
         <?php endif; ?>

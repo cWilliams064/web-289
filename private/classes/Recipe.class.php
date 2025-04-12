@@ -52,6 +52,25 @@ class Recipe extends DatabaseObject {
     return $photo ? $photo['img_path'] : '/web-289/public/assets/recipe-images/default-recipe-image.jpg';
   }
 
+  static public function count_all() {
+    $sql = "SELECT COUNT(*) FROM " . static::$table_name;
+    $resultSet = self::$database->query($sql);
+    $row = $resultSet->fetch_array();
+    return (int) array_shift($row);
+  }
+
+  static public function count_filtered($searchQuery) {
+    global $database;
+    $escapedSearchQuery = $database->escape_string($searchQuery);
+
+    $sql = "SELECT COUNT(*) FROM " . static::$table_name . " ";
+    $sql .= "WHERE recipe_name LIKE '%{$escapedSearchQuery}%'";
+
+    $resultSet = self::$database->query($sql);
+    $row = $resultSet->fetch_array();
+    return (int) array_shift($row);
+  }
+
   protected function validate_recipe() {
     $this->errors = [];
   
@@ -75,24 +94,4 @@ class Recipe extends DatabaseObject {
 
     return $this->errors;
   }
-
-  static public function count_all() {
-    $sql = "SELECT COUNT(*) FROM " . static::$table_name;
-    $resultSet = self::$database->query($sql);
-    $row = $resultSet->fetch_array();
-    return (int) array_shift($row);
-  }
-
-  static public function count_filtered($searchQuery) {
-    global $database;
-    $escapedSearchQuery = $database->escape_string($searchQuery);
-
-    $sql = "SELECT COUNT(*) FROM " . static::$table_name . " ";
-    $sql .= "WHERE recipe_name LIKE '%{$escapedSearchQuery}%'";
-
-    $resultSet = self::$database->query($sql);
-    $row = $resultSet->fetch_array();
-    return (int) array_shift($row);
-  }
-
 }
