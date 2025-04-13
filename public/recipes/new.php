@@ -30,18 +30,33 @@ $recipes = Recipe::find_by_sql($sql);
     <header role="banner">
       <nav>
         <ul>
-          <li><a href="../index.php">Home</a></li>
-          <li><a href="./index.php">Recipes</a></li>
-          <li><a href="../about.php">About Us</a></li>
-          <li><a href="#" id="open-sidebar"><?php echo !$session->is_logged_in() ? 'Log In' : 'View Profile'; ?></a></li>
-          <li><a href="#" id="open-sidebar-icon"><img src="../assets/login-image.png" width="27" height="27" alt="User icon that links to login."></a></li>
+          <li><a href="/web-289/public/index.php">Home</a></li>
+          <li><a href="/web-289/public/recipes/index.php">Recipes</a></li>
+          <li><a href="/web-289/public/about.php">About Us</a></li>
+          <li>
+            <a href="#" id="open-sidebar">
+              <?php if (!$session->is_logged_in()): ?>
+                <span>Log In</span>
+              <?php else: ?>
+                <div>
+                  <span class="text-flip"><?= $session->get_display_name() ?></span>
+                  <span class="text-flip">View Profile</span>
+                </div>
+              <?php endif; ?>
+            </a>
+          </li>
+          <li><a href="#"><img src="/web-289/public/assets/login-image.png" width="27" height="27" alt="User icon that links to login."></a></li>
         </ul>
       </nav>
-      <form>
-        <input type="text" placeholder="Search a recipe">
-        <button><img src="../assets/icons/search.svg" width="64" height="64" alt="Magnifying glass submit icon."></button>
+      <form  action="<?= $_SERVER['PHP_SELF'] ?>" method="GET">
+        <section>
+          <input type="text" name="search-query" placeholder="Search a recipe" value="<?php echo isset($_GET['search-query']) ? $escapedSearchQuery : ''; ?>">
+          <button>
+            <img src="/web-289/public/assets/icons/search.svg" width="64" height="64" alt="Magnifying glass submit icon.">
+          </button>
+        </section>
       </form>
-      <a href=""><img src="../assets/logo.png" width="500" height="500" alt="Pink and navy cupcake logo for Grandma's Pantry."></a>
+      <a href=""><img src="/web-289/public/assets/logo.png" width="500" height="500" alt="Pink and navy cupcake logo for Grandma's Pantry."></a>
     </header>
 
     <div id="wrapper">

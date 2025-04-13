@@ -80,18 +80,6 @@ header form button img {
   width: 35px;
 }
 
-#search-dropdown {
-  background-color: #fff;
-  border: 1px solid #ccc;
-  border-top: none;
-  left: 6.5rem;
-  overflow: hidden;
-  transition: all 0.3s ease;
-  top: 2rem;
-  width: 350px;
-  z-index: 10;
-}
-
 header > a {
   left: 50%;
   position: absolute;
@@ -108,12 +96,58 @@ header nav li {
   white-space: nowrap;
 }
 
+header nav ul li:has(#open-sidebar) {
+  margin: 0;
+}
+
+header nav li:last-of-type {
+  margin: 0 0 0 10px;
+}
+
 header nav li a:hover {
   border-bottom: 1px solid #fff;
 }
 
 header nav li:last-of-type a {
   border: none;
+}
+
+#open-sidebar div {
+  position: relative;
+  display: inline-block;
+  height: 1.1em;
+  min-width: 100px;
+  overflow: hidden;
+}
+
+#open-sidebar .text-flip {
+  display: block;
+  transition: transform 0.3s ease;
+}
+
+#open-sidebar .text-flip:first-child {
+  transform: translateY(0%);
+}
+
+#open-sidebar:hover .text-flip:first-child {
+  transform: translateY(-100%);
+}
+
+#open-sidebar .text-flip:last-child {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: translateY(100%);
+}
+
+#open-sidebar:hover .text-flip:last-child {
+  transform: translateY(0%);
+}
+
+header nav li img {
+  align-self: center;
+  height: auto;
+  width: 20px;
 }
 
 nav {
@@ -140,17 +174,7 @@ nav a {
 }
 
 nav ul li {
-  padding-right: 20px;
-}
-
-nav ul li:nth-last-child(-n+2) {
-  padding-right: 10px;
-}
-
-nav li img {
-  align-self: center;
-  height: auto;
-  width: 20px;
+  margin-right: 20px;
 }
 
 nav a,
@@ -326,12 +350,12 @@ main img {
 
 #home-page h1 {
   align-content: end;
-  font-size: 36px;
+  font-size: 50px;
   margin-bottom: 20px;
 }
 
 #home-page > section:first-of-type p {
-  font-size: 20px;
+  font-size: 30px;
 }
 
 #home-page > section:first-of-type section {
@@ -358,8 +382,8 @@ main img {
   border-radius: 5px;
   color: #fff;
   justify-self: center;
-  margin-bottom: 20px;
-  padding: 10px;
+  margin-bottom: 4rem;
+  padding: 20px;
   width: auto;
 }
 
@@ -380,7 +404,8 @@ main img {
 #popular-categories section {
   display: grid;
   grid-template-columns: 1fr;
-  grid-template-rows: .5fr;
+  grid-template-rows: 1fr;
+  justify-items: center;
 }
 
 #popular-categories section a {
@@ -504,6 +529,10 @@ main img {
   color: #fff;
   margin-top: 10px;
   padding: 6px;
+}
+
+#filters form input[type="submit"]:hover {
+  background-color: #a41150;
 }
 
 #recipes-page div > section:nth-of-type(2) > section {
@@ -881,6 +910,10 @@ footer p {
 footer nav {
   grid-column: 2;
   grid-row: 1;
+}
+
+footer nav ul li:nth-last-child(2) {
+  padding-right: 15px;
 }
 
 footer ul li:last-of-type {

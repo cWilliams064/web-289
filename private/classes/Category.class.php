@@ -140,6 +140,22 @@ class Category extends DatabaseObject {
         $this->errors['category_type'] = "Invalid category type.";
     }
 
+    if (empty($this->errors)) {
+      static::set_table($this->category_type);
+      $name_column = static::$db_columns[1];
+
+      $safe_name = self::$database->escape_string($this->name);
+      $sql = "SELECT COUNT(*) FROM " . static::$table_name;
+      $sql .= " WHERE {$name_column} = '{$safe_name}'";
+
+      $result = self::$database->query($sql);
+      $row = $result->fetch_row();
+
+      if ($row[0] > 0) {
+        $this->errors['name'] = "This category name already exists.";
+      }
+    }
+
     return $this->errors;
 	}
 

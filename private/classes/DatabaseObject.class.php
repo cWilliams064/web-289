@@ -13,7 +13,10 @@ class DatabaseObject {
   }
 
   static public function find_all() {
+    $primary_key_column = rtrim(static::$table_name, 's') . '_id';
+
     $sql = "SELECT * FROM " . static::$table_name;
+    $sql .= " ORDER BY $primary_key_column ASC";
     return static::find_by_sql($sql);
   }
   

@@ -77,6 +77,13 @@ class Session {
     return User::find_by_id($this->userId);
   }
 
+  public function get_display_name($maxLength = 15, $trimLength = 12) {
+    if (strlen($this->username) > $maxLength) {
+      return substr($this->username, 0, $trimLength) . '…';
+    }
+    return $this->username;
+  }
+
   public function logout() {
     unset($_SESSION['userId']);
     unset($_SESSION['username']);
