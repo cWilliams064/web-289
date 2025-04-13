@@ -18,7 +18,7 @@ $users = User::find_all();
   </head>
 
   <body>
-  <header role="banner">
+    <header role="banner">
       <nav>
         <ul>
           <li><a href="/web-289/public/index.php">Home</a></li>
@@ -36,7 +36,7 @@ $users = User::find_all();
               <?php endif; ?>
             </a>
           </li>
-          <li><a href="#"><img src="/web-289/public/assets/login-image.png" width="27" height="27" alt="User icon that links to login."></a></li>
+          <li><a href="#" id="open-sidebar-icon"><img src="/web-289/public/assets/login-image.png" width="27" height="27" alt="User icon that links to login."></a></li>
         </ul>
       </nav>
       <form  action="<?= $_SERVER['PHP_SELF'] ?>" method="GET">
@@ -47,7 +47,7 @@ $users = User::find_all();
           </button>
         </section>
       </form>
-      <a href=""><img src="/web-289/public/assets/logo.png" width="500" height="500" alt="Pink and navy cupcake logo for Grandma's Pantry."></a>
+      <a href="/web-289/public/index.php"><img src="/web-289/public/assets/logo.png" width="500" height="500" alt="Pink and navy cupcake logo for Grandma's Pantry."></a>
     </header>
 
     <div id="wrapper">
