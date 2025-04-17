@@ -27,7 +27,7 @@ $users = User::find_all();
           <li>
             <a href="#" id="open-sidebar">
               <?php if (!$session->is_logged_in()): ?>
-                <span>Log In</span>
+                <span>Log In/Sign up</span>
               <?php else: ?>
                 <div>
                   <span class="text-flip"><?= $session->get_display_name() ?></span>

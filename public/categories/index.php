@@ -26,7 +26,7 @@ require_admin_or_super_admin();
           <li>
             <a href="#" id="open-sidebar">
               <?php if (!$session->is_logged_in()): ?>
-                <span>Log In</span>
+                <span>Log In/Sign up</span>
               <?php else: ?>
                 <div>
                   <span class="text-flip"><?= $session->get_display_name() ?></span>
@@ -38,7 +38,7 @@ require_admin_or_super_admin();
           <li><a href="#" id="open-sidebar-icon"><img src="/web-289/public/assets/login-image.png" width="27" height="27" alt="User icon that links to login."></a></li>
         </ul>
       </nav>
-      <form  action="<?= $_SERVER['PHP_SELF'] ?>" method="GET">
+      <form action="/web-289/public/recipes/index.php" method="GET">
         <section>
           <input type="text" name="search-query" placeholder="Search a recipe" value="<?php echo isset($_GET['search-query']) ? $escapedSearchQuery : ''; ?>">
           <button>

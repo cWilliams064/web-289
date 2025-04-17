@@ -29,8 +29,8 @@ if(is_post_request() && isset($_POST['login'])) {
     if($user->verify_password($password)) {
       $session->login($user);
 
-      $current_page = basename($_SERVER['PHP_SELF']);
-      redirect_to(url_for($current_page));
+      $redirect_url = $_SERVER['HTTP_REFERER'] ?? url_for('/index.php');
+      redirect_to($redirect_url);
     }
   }
 }
@@ -41,7 +41,7 @@ if(is_post_request() && isset($_POST['login'])) {
   <div id="login">
     <button id="close-sidebar" aria-label="Close Sidebar"><img src="/web-289/public/assets/icons/x-icon.svg" width="14" height="14" alt="A X icon."></button>
     <h2>Login</h2>
-    <form action="<?= $_SERVER['PHP_SELF'] ?>" method="POST">
+    <form method="POST">
       <section>
         <label for="login-username">Username:</label><br>
         <input type="text" id="login-username" class="<?= isset($loginErrors['username']) ? 'error-input' : ''; ?>" name="username" value="<?= $username ?>" autocomplete="on"><br>

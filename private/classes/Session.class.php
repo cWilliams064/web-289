@@ -32,13 +32,9 @@ class Session {
         return false;
     }
 
-    $currentUser = User::find_by_id($this->userId);
+    $role_id = DatabaseObject::get_role_id($this->userId);
 
-    if ($currentUser) {
-      settype($currentUser->roleId, 'int');
-    }
-
-    return $currentUser && $currentUser->roleId === 2;
+    return $role_id === 2;
   }
 
   public function is_super_admin() {
@@ -46,13 +42,9 @@ class Session {
         return false;
     }
 
-    $currentUser = User::find_by_id($this->userId);
+    $role_id = DatabaseObject::get_role_id($this->userId);
 
-    if ($currentUser) {
-      settype($currentUser->roleId, 'int');
-    }
-
-    return $currentUser && $currentUser->roleId === 3;
+    return $role_id === 3;
   }
 
   public function is_super_admin_or_admin() {
@@ -60,13 +52,9 @@ class Session {
         return false;
     }
 
-    $current_user = User::find_by_id($this->userId);
+    $role_id = DatabaseObject::get_role_id($this->userId);
 
-    if ($current_user) {
-      settype($current_user->roleId, 'int');
-    }
-
-    return $current_user && ($current_user->roleId === 2 || $current_user->roleId === 3);
+    return ($role_id === 2 || $role_id === 3);
   }
 
   public function get_last_login() {

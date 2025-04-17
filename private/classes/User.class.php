@@ -87,7 +87,11 @@ class User extends DatabaseObject {
     }
   }
 
-  static public function find_by_username($username) {
+  public static function find_by_id($id) {
+    return parent::find_by_id($id);
+  }
+
+  public static function find_by_username($username) {
     $sql = "SELECT * FROM " . static::$table_name;
     $sql .= " WHERE username = '" . static::$database->escape_string($username) . "'";
     $obj_array = static::find_by_sql($sql);

@@ -1,13 +1,11 @@
 /*** Font Style ***/
 
 @import url('https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;700&display=swap');
-
 
 /*** Global, Viewport, and Wrapper ***/
 
 * {
-    box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 html {
@@ -445,6 +443,7 @@ main img {
 
 #recipes-page {
   padding: 2rem 0;
+  width: 100%;
 }
 
 #recipes-page h1 {
@@ -459,13 +458,13 @@ main img {
   padding: 2rem;
 }
 
-#recipes-page section > div {
+#recipes-page section > div:first-of-type  {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-#recipes-page div > section:nth-of-type(1) {
+#recipes-page div:first-of-type  > section:nth-of-type(1) {
   padding: 1rem 0;
 }
 
@@ -535,21 +534,53 @@ main img {
   background-color: #a41150;
 }
 
-#recipes-page div > section:nth-of-type(2) > section {
+#recipe-overlay {
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  height: 100%;
+  justify-content: center;
+  left: 0;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 999;
+}
+
+#fail-search-popup {
+  align-items: flex-end;
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 5px 25px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column-reverse;
+  padding: 1.5rem;
+  position: relative;
+  row-gap: 10px;
+  text-align: center;
+  width: 270px;
+}
+
+#close-popup {
+  padding-top: 5px;
+  width: 30px;
+}
+
+#recipes-page div:first-of-type > section:nth-of-type(2) > section {
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  height: 300px;
+  height: 250px;
   padding: 2rem 1rem 0 1rem;
   text-align: center;
 }
 
-#recipes-page div > section:last-of-type a {
+#recipes-page div:first-of-type  > section:last-of-type a {
   color: #0d5f6a;
   font-size: 20px;
 }
 
-#recipes-page div section > section {
+#recipes-page div:first-of-type section > section {
   border: 1px solid #808080;
   border-radius: 20px;
 }
@@ -638,8 +669,8 @@ main img {
   grid-column: 2;
 }
 
-#recipes-page div > section:nth-of-type(1),
-#recipes-page div > section:nth-of-type(2) {
+#recipes-page div:first-of-type > section:nth-of-type(1),
+#recipes-page div:first-of-type > section:nth-of-type(2) {
   width: 250px;
 }
 

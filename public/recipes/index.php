@@ -2,37 +2,43 @@
 
 require_once('../../private/initialize.php');
 
-$currentPage = $_GET['page'] ?? 1;
-$perPage = 12;
+$searchKeyword = $_GET['search'];
+$escapedSearchQuery = $database->escape_string($searchKeyword);
+$searchFailed = false;
 
-$mealTypes = Category::get_all_names('meal_types');
-$ethnicTypes = Category::get_all_names('ethnic_types');
-$dietTypes = Category::get_all_names('diet_types');
-
-if (!empty($_GET['search-query'])) {
-  $totalCount = Recipe::count_filtered($_GET['search-query']);
+if (!empty($searchKeyword)) {
+  $totalCount = Recipe::count_filtered($_GET['search']);
 } else {
   $totalCount = Recipe::count_all();
 }
 
+$currentPage = $_GET['page'] ?? 1;
+$perPage = 12;
 $pagination = new Pagination($currentPage, $perPage, $totalCount);
 
-if (isset($_GET['search-query'])) {
-  $searchQuery = $_GET['search-query'];
-  $escapedSearchQuery = $database->escape_string($searchQuery);
+if (!empty($searchKeyword)) {
+  $searchSql = "SELECT * FROM recipes ";
+  $searchSql .= "WHERE recipe_name LIKE '%{$escapedSearchQuery}%' ";
+  $searchSql .= "LIMIT {$perPage} OFFSET {$pagination->offset()}";
 
-  $sql = "SELECT * FROM recipes ";
-  $sql .= "WHERE recipe_name LIKE '%{$escapedSearchQuery}%' ";
-  $sql .= "LIMIT {$perPage} OFFSET {$pagination->offset()}";
+  $recipes = Recipe::find_by_sql($searchSql);
 
-  $recipes = Recipe::find_by_sql($sql);
+  if (empty($recipes)) {
+    $fallbackSql = "SELECT * FROM recipes ";
+    $fallbackSql .= "LIMIT {$perPage} OFFSET {$pagination->offset()}";
+    $recipes = Recipe::find_by_sql($fallbackSql);
+    $searchFailed = true;
+    $searchKeyword = '';
+  }
 } else {
   $sql = "SELECT * FROM recipes ";
-  $sql .= "LIMIT {$perPage} ";
-  $sql .= "OFFSET {$pagination->offset()}";
-
+  $sql .= "LIMIT {$perPage} OFFSET {$pagination->offset()}";
   $recipes = Recipe::find_by_sql($sql);
 }
+
+$mealTypes = Category::get_all_names('meal_types');
+$ethnicTypes = Category::get_all_names('ethnic_types');
+$dietTypes = Category::get_all_names('diet_types');
 
 ?>
 
@@ -57,7 +63,7 @@ if (isset($_GET['search-query'])) {
           <li>
             <a href="#" id="open-sidebar">
               <?php if (!$session->is_logged_in()): ?>
-                <span>Log In</span>
+                <span>Log In/Sign up</span>
               <?php else: ?>
                 <div>
                   <span class="text-flip"><?= $session->get_display_name() ?></span>
@@ -69,9 +75,9 @@ if (isset($_GET['search-query'])) {
           <li><a href="#" id="open-sidebar-icon"><img src="/web-289/public/assets/login-image.png" width="27" height="27" alt="User icon that links to login."></a></li>
         </ul>
       </nav>
-      <form  action="<?= $_SERVER['PHP_SELF'] ?>" method="GET">
+      <form action="/web-289/public/recipes/index.php" method="GET">
         <section>
-          <input type="text" name="search-query" placeholder="Search a recipe" value="<?php echo isset($_GET['search-query']) ? $escapedSearchQuery : ''; ?>">
+          <input type="text" name="search" placeholder="Search a recipe" value="<?php echo isset($_GET['search']) ? $escapedSearchQuery : ''; ?>">
           <button>
             <img src="/web-289/public/assets/icons/search.svg" width="64" height="64" alt="Magnifying glass submit icon.">
           </button>
@@ -82,13 +88,13 @@ if (isset($_GET['search-query'])) {
 
     <div id="wrapper">
       <?php 
-      if($session->is_logged_in()) {
-        include("../logged-in.php");
-      }
+        if ($session->is_logged_in()) {
+          include("../logged-in.php");
+        }
 
-      if(!$session->is_logged_in()) {
-        include("../login.php");
-      }
+        if (!$session->is_logged_in()) {
+          include("../login.php");
+        }
       ?>
       <main role="main" id="recipes-page">
         <h1>Recipes</h1>
@@ -98,37 +104,8 @@ if (isset($_GET['search-query'])) {
             <section>
               <section id="filters">
                 <h2>Filters</h2>
-                <form>
-                  <label for="meal-type">Type:</label><br>
-                  <select id="meal-type" name="meal-type">
-                    <option value="" selected disabled>All</option>
-                    <?php foreach($mealTypes as $type): ?>
-                      <option><?= h($type) ?></option>
-                    <?php endforeach; ?>
-                  </select><br>
-                  <label for="style-type">Style:</label><br>
-                  <select id="style-type" name="style-type">
-                    <option value="" selected disabled>All</option>
-                    <?php foreach($ethnicTypes as $type): ?>
-                      <option><?= h($type) ?></option>
-                    <?php endforeach; ?>
-                  </select><br>
-                  <label for="diet-type">Diet:</label><br>
-                  <select id="diet-type" name="diet-type">
-                    <option value="" selected disabled>All</option>
-                    <?php foreach($dietTypes as $type): ?>
-                      <option><?= h($type) ?></option>
-                    <?php endforeach; ?>
-                  </select>
-                  <section>
-                    <label for="newest">Newest:</label>
-                    <input type="checkbox" id="newest" name="newest">
-                  </section>
-                  <section>
-                    <label for="highest-rating">Highest Rating:</label>
-                    <input type="checkbox" id="highest-rating" name="highest-rating">
-                  </section>
-                  <input type="submit" name="fliters" value="Apply Filters">
+                <form id="filter-form" method="GET">
+                  <?php include('filter-form-fields.php'); ?>
                 </form>
               </section>
             </section>
@@ -139,22 +116,32 @@ if (isset($_GET['search-query'])) {
               </section>
             </section>
           </div>
+          <?php if ($searchFailed) : ?>
+            <div id="recipe-overlay">
+              <section id="fail-search-popup">
+                <p>No recipes found. Try a different search!</p>
+                <button id="close-popup">
+                  <img src="/web-289/public/assets/icons/x-icon.svg" width="14" height="14" alt="A X icon.">
+                </button>
+              </section>
+            </div>
+          <?php endif; ?>
           <section id="recipes-grid">
             <?php foreach ($recipes as $recipe) : ?>
-            <section class="recipe-card">
-              <h3><?= h($recipe->recipeName); ?></h3>
-              <img src="<?= h($recipe->get_recipe_photo()); ?>" alt="Recipe final product food image.">
-              <p><?= h($recipe->recipeDescription); ?></p>
-              <a href="./show.php?id=<?= $recipe->id; ?>">View Recipe</a>
-            </section>
+              <section class="recipe-card">
+                <h3><?= h($recipe->recipeName); ?></h3>
+                <img src="<?= h($recipe->get_recipe_photo()); ?>" alt="Recipe final product food image.">
+                <p><?= h($recipe->recipeDescription); ?></p>
+                <a href="./show.php?id=<?= $recipe->id; ?>">View Recipe</a>
+              </section>
             <?php endforeach; ?>
           </section>
           <?php 
-              if($pagination->total_pages() > 1) {
+              if ($pagination->total_pages() > 1) {
                 echo "<section id=\"pagination\">";
 
                 $url = url_for('/recipes/index.php');
-                $searchString = isset($_GET['search-query']) ? "&search-query=" . urlencode($_GET['search-query']) : '';
+                $searchString = isset($_GET['search']) ? "&search=" . urlencode($_GET['search']) : '';
 
                 echo $pagination->previous_link("{$url}?page=" . ($pagination->currentPage - 1) . $searchString);
 
