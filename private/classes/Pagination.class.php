@@ -71,12 +71,18 @@ class Pagination {
         $output .= $this->number_page_link($url, $i);
       }
     } else {
+      $start = max(1, $this->currentPage - 2);
+      $end = min($totalPages, $this->currentPage + 2);
 
-      for ($i = 1; $i <= 5; $i++) {
+      for ($i = $start; $i <= $end; $i++) {
         $output .= $this->number_page_link($url, $i);
       }
 
-      if ($totalPages > 5) {
+      if ($this->currentPage > 5) {
+        $output = "<span>...</span>" . $output;
+      }
+
+      if ($this->currentPage < $totalPages - 5) {
         $output .= "<span>...</span>";
       }
     }

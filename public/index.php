@@ -4,11 +4,14 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>Grandma's Pantry</title>
-    <script src="js/app.js" defer></script>
-    <link href=favicon.ico rel="icon">
-    <link href="css/styles.css" rel="stylesheet">
+    <title>Recipes</title>
+    <link href="./favicon.ico" rel="icon">
+    <link href="./css/styles.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://kit.fontawesome.com/3f0ab9bbdb.js" crossorigin="3f0ab9bbdb"></script>
+    <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
+    <script src="./js/app.js" defer></script>
   </head>
 
   <body>
@@ -35,7 +38,7 @@
       </nav>
       <form action="/web-289/public/recipes/index.php" method="GET">
         <section>
-          <input type="text" name="search-query" placeholder="Search a recipe" value="<?php echo isset($_GET['search-query']) ? $escapedSearchQuery : ''; ?>">
+          <input type="text" name="search" placeholder="Search a recipe" value="<?php echo isset($_GET['search']) ? $escapedSearchQuery : ''; ?>">
           <button>
             <img src="/web-289/public/assets/icons/search.svg" width="64" height="64" alt="Magnifying glass submit icon.">
           </button>
@@ -81,8 +84,10 @@
         <section>
           <article>
             <h2>The Heart of Grandma's Pantry</h2>
-            <p>Welcome to Grandma's Pantry, where every recipe is more than just a list of ingredients—it's a story waiting to be told. Inspired by the warmth and tradition of family kitchens, our mission is to empower cooks of all levels to create meals that bring people together.</p>
-            <p>Whether you're exploring cherished classics or experimenting with new flavors, Grandma's Pantry is here to guide you every step of the way. Dive into our collection, share the joy of cooking, and start crafting memories one recipe at a time. Your culinary adventure begins here!</p>
+            <p>Welcome to Grandma's Pantry, a place where recipes feel like home. Every dish you find here has a story. Some come from old family cookbooks, and others were made from fun experiments in the kitchen. No matter where they started, all our recipes are meant to be shared and enjoyed with the people you love.</p>
+            <p>Here, cooking is about more than just food. It's about memories, laughter, and time spent together. Whether you're learning to cook or have been doing it for years, Grandma's Pantry is here to help you have fun in the kitchen and try something new.</p>
+            <p>Life gets busy, and we know that cooking isn't always easy. That's why we've made it simple to search by ingredients or type of meal. So if you only have a few things in your kitchen, we can help you turn them into something delicious.</p>
+            <p>So come on in and take a look around. Try a recipe, share your own, or just get inspired for your next meal. Grandma’s Pantry is more than a website—it's a cozy place where good food and good memories come together.</p>
           </article>
           <img src="assets/pancake-skillet.png" width="478" height="615" alt="A black skillet with pancakes and mixed berries.">
         </section>
@@ -99,9 +104,9 @@
           </ul>
         </nav>
         <section>
-          <a href="https://www.instagram.com/accounts/login/?hl=en" target="_blank"><img src="assets/icons/instagram.png" width="31" height="31" alt="The social media Instagram logo."></a>
-          <a href="https://x.com/i/flow/login" target="_blank"><img src="assets/icons/x-social-media.png" width="31" height="31" alt="The social media X logo"></a>
-          <a href="https://www.facebook.com/login.php/" target="_blank"><img src="assets/icons/facebook.png" width="31" height="31" alt="The social media Facebook logo."></a>
+          <a href="https://www.instagram.com/"><i class="fa-brands fa-instagram fa-xl"></i></a>
+          <a href="https://x.com/?lang=en"><i class="fa-brands fa-x-twitter fa-xl"></i></a>
+          <a href="https://www.facebook.com/"><i class="fa-brands fa-facebook fa-xl"></i></a>
         </section>
     </footer>
   </body>

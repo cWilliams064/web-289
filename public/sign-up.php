@@ -2,21 +2,21 @@
 
 require_once('../private/initialize.php'); 
 
-if(is_post_request() && $_POST['signup']) {
+if(is_post_request() && isset($_POST['signup'])) {
 
   $args = $_POST['user'];
+
   $user = new User($args);
   $user->validate();
   $result = $user->save();
 
   if($result === true) {
-    $new_id = $user->id;
+    $newId = $user->id;
     $session->login($user);
-    $session->message('The user was created and logged in successfully.');
-    redirect_to(url_for('index.php'));
+    redirect_to(url_for('./index.php'));
   } 
   else {
-
+    $errors = $user->errors;
   }
 } 
 else {
@@ -29,11 +29,14 @@ else {
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>Sign Up</title>
-    <script src="js/app.js" defer></script>
-    <link href=favicon.ico rel="icon">
-    <link href="css/styles.css" rel="stylesheet">
+    <title>Recipes</title>
+    <link href="./favicon.ico" rel="icon">
+    <link href="./css/styles.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://kit.fontawesome.com/3f0ab9bbdb.js" crossorigin="3f0ab9bbdb"></script>
+    <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
+    <script src="./js/app.js" defer></script>
   </head>
 
   <body>
@@ -60,7 +63,7 @@ else {
       </nav>
       <form action="/web-289/public/recipes/index.php" method="GET">
         <section>
-          <input type="text" name="search-query" placeholder="Search a recipe" value="<?php echo isset($_GET['search-query']) ? $escapedSearchQuery : ''; ?>">
+          <input type="text" name="search" placeholder="Search a recipe" value="<?php echo isset($_GET['search']) ? $escapedSearchQuery : ''; ?>">
           <button>
             <img src="/web-289/public/assets/icons/search.svg" width="64" height="64" alt="Magnifying glass submit icon.">
           </button>
@@ -79,7 +82,7 @@ else {
       <main role="main" id="signup-page">
         <h1>Sign Up</h1>
 
-        <form action="index.php" method="POST">
+        <form action="#" method="POST">
           <section>
             <p>*</p>
             <p>= required</p>
@@ -101,9 +104,9 @@ else {
           </ul>
         </nav>
         <section>
-          <img src="assets/icons/instagram.png" width="31" height="31" alt="The social media Instagram logo.">
-          <img src="assets/icons/x-social-media.png" width="31" height="31" alt="The social media X logo">
-          <img src="assets/icons/facebook.png" width="31" height="31" alt="The social media Facebook logo.">
+          <a href="https://www.instagram.com/"><i class="fa-brands fa-instagram fa-xl"></i></a>
+          <a href="https://x.com/?lang=en"><i class="fa-brands fa-x-twitter fa-xl"></i></a>
+          <a href="https://www.facebook.com/"><i class="fa-brands fa-facebook fa-xl"></i></a>
         </section>
     </footer>
   </body>

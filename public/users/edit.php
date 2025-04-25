@@ -35,11 +35,14 @@ else {
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>Edit User</title>
-    <script src="../js/app.js" defer></script>
+    <title>Recipes</title>
     <link href="../favicon.ico" rel="icon">
     <link href="../css/styles.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://kit.fontawesome.com/3f0ab9bbdb.js" crossorigin="3f0ab9bbdb"></script>
+    <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
+    <script src="../js/app.js" defer></script>
   </head>
 
   <body>
@@ -66,7 +69,7 @@ else {
       </nav>
       <form  action="<?= $_SERVER['PHP_SELF'] ?>" method="GET">
         <section>
-          <input type="text" name="search-query" placeholder="Search a recipe" value="<?php echo isset($_GET['search-query']) ? $escapedSearchQuery : ''; ?>">
+          <input type="text" name="search" placeholder="Search a recipe" value="<?php echo isset($_GET['search']) ? $escapedSearchQuery : ''; ?>">
           <button>
             <img src="/web-289/public/assets/icons/search.svg" width="64" height="64" alt="Magnifying glass submit icon.">
           </button>
@@ -107,9 +110,9 @@ else {
           </ul>
         </nav>
         <section>
-          <img src="../assets/icons/instagram.png" width="31" height="31" alt="The social media Instagram logo.">
-          <img src="../assets/icons/x-social-media.png" width="31" height="31" alt="The social media X logo">
-          <img src="../assets/icons/facebook.png" width="31" height="31" alt="The social media Facebook logo.">
+          <a href="https://www.instagram.com/"><i class="fa-brands fa-instagram fa-xl"></i></a>
+          <a href="https://x.com/?lang=en"><i class="fa-brands fa-x-twitter fa-xl"></i></a>
+          <a href="https://www.facebook.com/"><i class="fa-brands fa-facebook fa-xl"></i></a>
         </section>
     </footer>
   </body>

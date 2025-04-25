@@ -49,6 +49,7 @@ function closeSidebar() {
 
 
 // Recipe Page
+
 const closePopup = document.getElementById('close-popup');
 const popupOverlay = document.getElementById('recipe-overlay');
 const recipeData = document.getElementById('recipe-data');
@@ -70,15 +71,34 @@ function popup() {
   });
 }
 
-function getFilterValues() {
-  return {
-    meal: document.getElementById("meal-type")?.value || "",
-    ethnic: document.getElementById("ethnic-type")?.value || "",
-    diet: document.getElementById("diet-type")?.value || ""
-  };
-}
+// Choices.js
 
-function applyFilters(recipes, ) {
+document.addEventListener('DOMContentLoaded', function () {
+  const mealType = document.querySelector('#meal-type');
+  const ethnicType = document.querySelector('#ethnic-type');
+  const dietType = document.querySelector('#diet-type');
 
-}
-  
+  if (mealType) {
+    new Choices(mealType, {
+      removeItemButton: true,
+      placeholderValue: 'Select meal types',
+      searchPlaceholderValue: 'Search meal types'
+    });
+  }
+
+  if (ethnicType) {
+    new Choices(ethnicType, {
+      removeItemButton: true,
+      placeholderValue: 'Select ethnic types',
+      searchPlaceholderValue: 'Search styles'
+    });
+  }
+
+  if (dietType) {
+    new Choices(dietType, {
+      removeItemButton: true,
+      placeholderValue: 'Select diet types',
+      searchPlaceholderValue: 'Search diets'
+    });
+  }
+});

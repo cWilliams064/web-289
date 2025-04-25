@@ -10,6 +10,9 @@ class Category extends DatabaseObject {
   static protected $db_columns = [];
 
 	public function __construct($args = []) {
+    if (isset($args['id'])) {
+      $this->id = $args['id'];
+    }
 		if (isset($args['name'])) {
 				$this->name = $args['name'];
 		}
@@ -19,21 +22,31 @@ class Category extends DatabaseObject {
 	}
 
   static protected function instantiate($record) {
-		$object = new static;
+    if (isset($record['meal_type_id'])) {
+        return new static([
+            'id' => $record['meal_type_id'], 
+            'name' => $record['meal_type_name'], 
+            'category_type' => 'meal_types'
+        ]);
+    }
+    elseif (isset($record['ethnic_type_id'])) {
+        return new static([
+            'id' => $record['ethnic_type_id'], 
+            'name' => $record['ethnic_type_name'], 
+            'category_type' => 'ethnic_types'
+        ]);
+    }
+    elseif (isset($record['diet_type_id'])) {
+        return new static([
+            'id' => $record['diet_type_id'], 
+            'name' => $record['diet_type_name'], 
+            'category_type' => 'diet_types'
+        ]);
+    }
 
-		if (isset($record['meal_type_id'])) {
-				$object->id = $record['meal_type_id'];
-				$object->name = $record['meal_type_name'];
-		} elseif (isset($record['ethnic_type_id'])) {
-				$object->id = $record['ethnic_type_id'];
-				$object->name = $record['ethnic_type_name'];
-		} elseif (isset($record['diet_type_id'])) {
-				$object->id = $record['diet_type_id'];
-				$object->name = $record['diet_type_name'];
-		}
+    return null;
+  }
 
-		return $object;
-	}
 	
 	static public function set_table($table) {
 		static::$table_name = $table;
@@ -75,25 +88,22 @@ class Category extends DatabaseObject {
   }
 
   public static function get_all_names($table) {
-    static::set_table($table);
-
-    $name_column = static::$db_columns[1];
-    $sql = "SELECT {$name_column} FROM " . static::$table_name;
-    $sql .= " ORDER BY {$name_column} ASC";
-
-    $result = self::$database->query($sql);
-    $names = [];
-
-    if ($result) {
-      while ($row = $result->fetch_assoc()) {
-        $names[] = $row[$name_column];
-      }
-      $result->free();
+    $columnMap = [
+      'meal_types' => ['id' => 'meal_type_id', 'name' => 'meal_type_name'],
+      'ethnic_types' => ['id' => 'ethnic_type_id', 'name' => 'ethnic_type_name'],
+      'diet_types' => ['id' => 'diet_type_id', 'name' => 'diet_type_name']
+    ];
+  
+    if (!is_string($table) || !array_key_exists($table, $columnMap)) {
+      return [];
     }
 
-    return $names;
-  }
+    $columns = $columnMap[$table];
 
+    $sql = "SELECT {$columns['id']}, {$columns['name']} FROM {$table} ORDER BY {$columns['name']} ASC";
+  
+    return static::find_by_sql($sql);
+  }  
 
 	protected function create() {
 		$this->validate_category();

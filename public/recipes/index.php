@@ -2,43 +2,64 @@
 
 require_once('../../private/initialize.php');
 
-$searchKeyword = $_GET['search'];
+$searchKeyword = $_GET['search'] ?? '';
+$selectedMealTypes = $_GET['meal_type'] ?? [];
+$selectedEthnicTypes = $_GET['ethnic_type'] ?? [];
+$selectedDietTypes = $_GET['diet_type'] ?? [];
+
+$sortOptions = [];
+
+if (isset($_GET['newest'])) {
+  $sortOptions[] = 'newest';
+}
+
+if (isset($_GET['highest-rating'])) {
+  $sortOptions[] = 'highest-rating';
+}
+
 $escapedSearchQuery = $database->escape_string($searchKeyword);
 $searchFailed = false;
 
-if (!empty($searchKeyword)) {
-  $totalCount = Recipe::count_filtered($_GET['search']);
+$newest = isset($_GET['newest']);
+$highestRating = isset($_GET['highest-rating']);
+
+if (empty($_GET['search']) && empty($selectedMealTypes) && empty($selectedEthnicTypes) && empty($selectedDietTypes)) {
+  $totalCount= Recipe::count_all();
 } else {
-  $totalCount = Recipe::count_all();
+  $totalCount = Recipe::count_by_filters(
+    $searchKeyword,
+    $selectedMealTypes,
+    $selectedEthnicTypes,
+    $selectedDietTypes
+  );
 }
 
 $currentPage = $_GET['page'] ?? 1;
 $perPage = 12;
+
 $pagination = new Pagination($currentPage, $perPage, $totalCount);
 
-if (!empty($searchKeyword)) {
-  $searchSql = "SELECT * FROM recipes ";
-  $searchSql .= "WHERE recipe_name LIKE '%{$escapedSearchQuery}%' ";
-  $searchSql .= "LIMIT {$perPage} OFFSET {$pagination->offset()}";
-
-  $recipes = Recipe::find_by_sql($searchSql);
-
-  if (empty($recipes)) {
-    $fallbackSql = "SELECT * FROM recipes ";
-    $fallbackSql .= "LIMIT {$perPage} OFFSET {$pagination->offset()}";
-    $recipes = Recipe::find_by_sql($fallbackSql);
-    $searchFailed = true;
-    $searchKeyword = '';
-  }
-} else {
-  $sql = "SELECT * FROM recipes ";
-  $sql .= "LIMIT {$perPage} OFFSET {$pagination->offset()}";
-  $recipes = Recipe::find_by_sql($sql);
+if ($recipe) {
+  $recipe->loadTimes();
 }
 
-$mealTypes = Category::get_all_names('meal_types');
-$ethnicTypes = Category::get_all_names('ethnic_types');
-$dietTypes = Category::get_all_names('diet_types');
+$recipes = Recipe::find_by_filters(
+  $searchKeyword,
+  $perPage,
+  $pagination->offset(),
+  $selectedMealTypes,
+  $selectedEthnicTypes,
+  $selectedDietTypes,
+  $sortOptions
+);
+
+if (empty($recipes)) {
+  $fallbackSql = "SELECT * FROM recipes ";
+  $fallbackSql .= "LIMIT {$perPage} OFFSET {$pagination->offset()}";
+  $recipes = Recipe::find_by_sql($fallbackSql);
+  $searchFailed = true;
+  $searchKeyword = '';
+}
 
 ?>
 
@@ -47,10 +68,13 @@ $dietTypes = Category::get_all_names('diet_types');
   <head>
     <meta charset="utf-8">
     <title>Recipes</title>
-    <script src="../js/app.js" defer></script>
     <link href="../favicon.ico" rel="icon">
     <link href="../css/styles.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://kit.fontawesome.com/3f0ab9bbdb.js" crossorigin="3f0ab9bbdb"></script>
+    <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
+    <script src="../js/app.js" defer></script>
   </head>
 
   <body>
@@ -77,7 +101,7 @@ $dietTypes = Category::get_all_names('diet_types');
       </nav>
       <form action="/web-289/public/recipes/index.php" method="GET">
         <section>
-          <input type="text" name="search" placeholder="Search a recipe" value="<?php echo isset($_GET['search']) ? $escapedSearchQuery : ''; ?>">
+          <input type="text" name="search" placeholder="Search a recipe" value="<?= h($_GET['search'] ?? '') ?>">
           <button>
             <img src="/web-289/public/assets/icons/search.svg" width="64" height="64" alt="Magnifying glass submit icon.">
           </button>
@@ -104,7 +128,7 @@ $dietTypes = Category::get_all_names('diet_types');
             <section>
               <section id="filters">
                 <h2>Filters</h2>
-                <form id="filter-form" method="GET">
+                <form action="" id="filter-form" method="GET">
                   <?php include('filter-form-fields.php'); ?>
                 </form>
               </section>
@@ -119,7 +143,7 @@ $dietTypes = Category::get_all_names('diet_types');
           <?php if ($searchFailed) : ?>
             <div id="recipe-overlay">
               <section id="fail-search-popup">
-                <p>No recipes found. Try a different search!</p>
+                <p>No recipes found. Try a different search or filter!</p>
                 <button id="close-popup">
                   <img src="/web-289/public/assets/icons/x-icon.svg" width="14" height="14" alt="A X icon.">
                 </button>
@@ -128,40 +152,79 @@ $dietTypes = Category::get_all_names('diet_types');
           <?php endif; ?>
           <section id="recipes-grid">
             <?php foreach ($recipes as $recipe) : ?>
+              <?php $rating = $recipe->get_rating_info(); ?>
               <section class="recipe-card">
                 <h3><?= h($recipe->recipeName); ?></h3>
-                <img src="<?= h($recipe->get_recipe_photo()); ?>" alt="Recipe final product food image.">
-                <p><?= h($recipe->recipeDescription); ?></p>
-                <a href="./show.php?id=<?= $recipe->id; ?>">View Recipe</a>
+                <img src="<?= $recipe->get_recipe_photo(); ?>" alt="Photo of <?= h($recipe->recipeName); ?>">
+                <section>
+                  <div>
+                    <p>Prep: <span class="recipe-times"><?= h($recipe->get_prep_time()); ?></span></p>
+                  </div>
+                  <div>
+                    <p>Cook: <span class="recipe-times"><?= h($recipe->get_cook_time()); ?></span></p>
+                  </div>
+                  <p><span><?= $rating['average']; ?>/5</span> Star(s)</p>
+                  <p><span><?= $rating['total']; ?> </span>Rating(s)</p>
+                </section>
+                <section>
+                  <div>
+                    <i class="fa-regular fa-star fa-xl"></i>
+                    <i class="fa-regular fa-star fa-xl"></i>
+                    <i class="fa-regular fa-star fa-xl"></i>
+                    <i class="fa-regular fa-star fa-xl"></i>
+                    <i class="fa-regular fa-star fa-xl"></i>
+                  </div>
+                  <a href="./show.php?id=<?= $recipe->id; ?>">View Recipe</a>
+                </section>
               </section>
             <?php endforeach; ?>
           </section>
           <?php 
-              if ($pagination->total_pages() > 1) {
-                echo "<section id=\"pagination\">";
+            if ($pagination->total_pages() > 1) {
+              echo "<section id=\"pagination\">";
 
-                $url = url_for('/recipes/index.php');
-                $searchString = isset($_GET['search']) ? "&search=" . urlencode($_GET['search']) : '';
+              $url = url_for('/recipes/index.php');
+              $queryParams = [];
 
-                echo $pagination->previous_link("{$url}?page=" . ($pagination->currentPage - 1) . $searchString);
+              if (!empty($_GET['search'])) {
+                $queryParams['search'] = $_GET['search'];
+              }
 
-                echo "<section id=\"page-numbers\">";
-                for($i=1; $i <= $pagination->total_pages(); $i++) {
-                  $link = "{$url}?page={$i}{$searchString}";
-                  
-                  if ($i == $pagination->currentPage) {
-                    echo "<span id=\"selected-link\">{$i}</span>";
-                  } else {
-                    echo "<a href=\"{$link}\">{$i}</a>";
+              foreach (['meal_type', 'ethnic_type', 'diet_type'] as $filterName) {
+                if (!empty($_GET[$filterName])) {
+                  foreach ($_GET[$filterName] as $value) {
+                    $queryParams[$filterName . '[]'][] = $value;
                   }
                 }
-                echo "</section>";
-
-                echo $pagination->next_link("{$url}?page=" . ($pagination->currentPage + 1) . $searchString);
-
-                echo "</section>";
               }
-            ?>
+
+              if (isset($_GET['newest'])) {
+                $queryParams['newest'] = 'on';
+              }
+
+              if (isset($_GET['highest-rating'])) {
+                $queryParams['highest-rating'] = 'on';
+              }
+
+              $filterQueryString = http_build_query($queryParams);
+
+              echo $pagination->previous_link("{$url}?page=" . ($pagination->currentPage - 1) . "&" . $filterQueryString);
+
+              echo "<section id=\"page-numbers\">";
+              for($i=1; $i <= $pagination->total_pages(); $i++) {
+                if ($i == $pagination->currentPage) {
+                  echo "<span id=\"selected-link\">{$i}</span>";
+                } else {
+                  echo "<a href=\"{$url}?page={$i}&{$filterQueryString}\">{$i}</a>";
+                }
+              }
+              echo "</section>";
+
+              echo $pagination->next_link("{$url}?page=" . ($pagination->currentPage + 1) . "&" . $filterQueryString);
+
+              echo "</section>";
+            }
+          ?>
         </section>
       </main>
     </div>
@@ -175,9 +238,9 @@ $dietTypes = Category::get_all_names('diet_types');
           </ul>
         </nav>
         <section>
-          <img src="../assets/icons/instagram.png" width="31" height="31" alt="The social media Instagram logo.">
-          <img src="../assets/icons/x-social-media.png" width="31" height="31" alt="The social media X logo">
-          <img src="../assets/icons/facebook.png" width="31" height="31" alt="The social media Facebook logo.">
+          <a href="https://www.instagram.com/"><i class="fa-brands fa-instagram fa-xl"></i></a>
+          <a href="https://x.com/?lang=en"><i class="fa-brands fa-x-twitter fa-xl"></i></a>
+          <a href="https://www.facebook.com/"><i class="fa-brands fa-facebook fa-xl"></i></a>
         </section>
     </footer>
   </body>
