@@ -1,6 +1,7 @@
 <?php
 
 class Category extends DatabaseObject {
+  
 	public $id;
   public $name;
 	public $category_type;
@@ -46,7 +47,6 @@ class Category extends DatabaseObject {
 
     return null;
   }
-
 	
 	static public function set_table($table) {
 		static::$table_name = $table;

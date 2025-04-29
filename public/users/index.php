@@ -10,7 +10,7 @@ $users = User::find_all();
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>Recipes</title>
+    <title>Manage Users</title>
     <link href="../favicon.ico" rel="icon">
     <link href="../css/styles.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css" />
@@ -63,7 +63,7 @@ $users = User::find_all();
         include("../login.php");
       }
       ?>
-      <main role="main" id="manage-users">
+      <main role="main" class="manage">
         <h1>Manage Users</h1>
         <a href="/web-289/public/users/new.php">Create User</a>
         <table>

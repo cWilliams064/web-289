@@ -39,10 +39,6 @@ $perPage = 12;
 
 $pagination = new Pagination($currentPage, $perPage, $totalCount);
 
-if ($recipe) {
-  $recipe->loadTimes();
-}
-
 $recipes = Recipe::find_by_filters(
   $searchKeyword,
   $perPage,
@@ -141,10 +137,10 @@ if (empty($recipes)) {
             </section>
           </div>
           <?php if ($searchFailed) : ?>
-            <div id="recipe-overlay">
+            <div id="recipe-overlay" role="alert">
               <section id="fail-search-popup">
                 <p>No recipes found. Try a different search or filter!</p>
-                <button id="close-popup">
+                <button id="close-popup-search">
                   <img src="/web-289/public/assets/icons/x-icon.svg" width="14" height="14" alt="A X icon.">
                 </button>
               </section>
@@ -158,7 +154,7 @@ if (empty($recipes)) {
                 <img src="<?= $recipe->get_recipe_photo(); ?>" alt="Photo of <?= h($recipe->recipeName); ?>">
                 <section>
                   <div>
-                    <p>Prep: <span class="recipe-times"><?= h($recipe->get_prep_time()); ?></span></p>
+                    <p>Prep: <span class="recipe-times"><?= h($recipe->get_prep_time());; ?></span></p>
                   </div>
                   <div>
                     <p>Cook: <span class="recipe-times"><?= h($recipe->get_cook_time()); ?></span></p>
@@ -167,12 +163,19 @@ if (empty($recipes)) {
                   <p><span><?= $rating['total']; ?> </span>Rating(s)</p>
                 </section>
                 <section>
-                  <div>
-                    <i class="fa-regular fa-star fa-xl"></i>
-                    <i class="fa-regular fa-star fa-xl"></i>
-                    <i class="fa-regular fa-star fa-xl"></i>
-                    <i class="fa-regular fa-star fa-xl"></i>
-                    <i class="fa-regular fa-star fa-xl"></i>
+                  <div id="rating-stars">
+                    <?php
+                      $averageRating = $rating['average'];
+                      for ($i = 1; $i <= 5; $i++) {
+                        if ($averageRating >= $i) {
+                          echo '<i class="fa-solid fa-star fa-xl"></i>';
+                        } elseif ($averageRating >= ($i - 0.5)) {
+                          echo '<i class="fa-solid fa-star-half-stroke fa-xl"></i>';
+                        } else {
+                          echo '<i class="fa-regular fa-star fa-xl"></i>';
+                        }
+                      }
+                    ?>
                   </div>
                   <a href="./show.php?id=<?= $recipe->id; ?>">View Recipe</a>
                 </section>

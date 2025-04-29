@@ -2,16 +2,26 @@
 
 require_once('../../private/initialize.php');
 
-$currentPage = $_GET['page'] ?? 1;
-$perPage = 12;
-$totalCount = Recipe::count_all();
+require_login();
 
-$pagination = new Pagination($currentPage, $perPage, $totalCount);
+$user = $session->get_user();
+$userId = $user->id;
 
-$sql = "SELECT * FROM recipes ";
-$sql .= "LIMIT {$perPage} ";
-$sql .= "OFFSET {$pagination->offset()}";
-$recipes = Recipe::find_by_sql($sql);
+$meal_types = Category::get_all_names('meal_types');
+$ethnic_types = Category::get_all_names('ethnic_types');
+$diet_types = Category::get_all_names('diet_types');
+$units = Unit::get_all_units();
+
+if (is_post_request()) {
+  $args = $_POST['recipe'] ?? [];
+
+  $recipe = new Recipe($args);
+  $recipe->userId = $userId;
+
+  $result = $recipe->create();
+
+  redirect_to(url_for('/recipes/show.php?id=' . $newId));
+};
 
 ?>
 
@@ -19,7 +29,7 @@ $recipes = Recipe::find_by_sql($sql);
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>Recipes</title>
+    <title>Create Recipe</title>
     <link href="../favicon.ico" rel="icon">
     <link href="../css/styles.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css" />
@@ -72,8 +82,18 @@ $recipes = Recipe::find_by_sql($sql);
         include("../login.php");
       }
       ?>
-      <main role="main" id="recipes-page">
-        
+      <main role="main" id="create-recipe-page">
+        <h1>Post a New Recipe</h1>
+
+        <hr>
+        <form method="POST" name="recipe-form" enctype="multipart/form-data">
+          <section>
+            <p>*</p>
+            <p>= required</p>
+          </section>
+          <?php include("form-fields.php"); ?>
+          <button type="submit">Post Recipe</button>
+        </form>
       </main>
     </div>
     <footer>
@@ -91,6 +111,13 @@ $recipes = Recipe::find_by_sql($sql);
           <a href="https://www.facebook.com/"><i class="fa-brands fa-facebook fa-xl"></i></a>
         </section>
     </footer>
+    <div id="comingSoonPopup" class="coming-soon-popup">
+      <div class="popup-content">
+        <span class="close-button" onclick="closeComingSoonPopup()">&times;</span>
+        <h2>Feature Coming Soon!</h2>
+        <p>We're working hard to bring you this exciting feature. Stay tuned for updates!</p>
+      </div>
+    </div>
   </body>
   
 </html>

@@ -14,7 +14,7 @@ require_login();
       <p>Email: <?= $user->email; ?></p>
     </section>
     <a href="/web-289/public/logout.php">Logout</a>
-    <a href="/web-289/public/users/user-recipes.php">My Recipes</a>
+    <a href="/web-289/public/users/user-recipes.php" id="myRecipesLink">My Recipes</a>
     <a href="/web-289/public/recipes/new.php">Post Recipe</a>
     <?php if($session->is_super_admin_or_admin()): ?>
     <a href="/web-289/public/users/index.php">Manage Users</a>

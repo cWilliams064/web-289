@@ -58,8 +58,8 @@ class DatabaseObject {
     if ($result) {
       $row = $result->fetch_assoc();
       if ($row) {
-          settype($row['role_id'], 'int');
-          return $row['role_id'];
+        settype($row['role_id'], 'int');
+        return $row['role_id'];
       }
     }
     return false;
@@ -99,6 +99,7 @@ class DatabaseObject {
     $sql .= "')";
 
     $result = self::$database->query($sql);
+
     if ($result) {
       $this->id = self::$database->insert_id;
     }
@@ -174,7 +175,7 @@ class DatabaseObject {
   protected function sanitized_attributes() {
     $sanitized = [];
     foreach($this->attributes() as $key => $value) {
-      $sanitized[$key] = self::$database->escape_string($value);
+        $sanitized[$key] = isset($value) ? self::$database->escape_string($value) : null;
     }
     return $sanitized;
   }

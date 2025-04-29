@@ -9,7 +9,7 @@ require_admin_or_super_admin();
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>Recipes</title>
+    <title>Manage Categories</title>
     <link href="../favicon.ico" rel="icon">
     <link href="../css/styles.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css" />
@@ -62,7 +62,7 @@ require_admin_or_super_admin();
         include("../login.php");
       }
       ?>
-      <main role="main" id="manage-users">
+      <main role="main" class="manage">
         <h1>Manage Categories</h1>
 
         <a href="./new.php">Create Category</a>

@@ -6,22 +6,24 @@ class Recipe extends DatabaseObject {
   static protected $db_columns = ['recipe_id', 'user_id', 'recipe_name', 'recipe_description', 'servings', 'created_at'];
 
   public $id;
+  public $userId;
   public $recipeName;
   public $recipeDescription;
   public $servings;
   public $createdAt;
-  public $prepTimeSeconds;
-  public $cookTimeSeconds;
+  public $recipeTime;
+  public $mealTypes;
+  public $ethnicTypes;
+  public $dietTypes;
   public $errors = [];
 
   public function __construct($args=[]) {
-    $this->id = $args['recipe_id'] ?? '';
+    $this->id = $args['recipe_id'] ?? null;
+    $this->userId = $args['user_id'] ?? '';
     $this->recipeName = $args['recipe_name'] ?? '';
     $this->recipeDescription = $args['recipe_description'] ?? '';
     $this->servings = $args['servings'] ?? '';
-    $this->createdAt = $args['created_at'] ?? '';
-    $this->prepTimeSeconds = null;
-    $this->cookTimeSeconds = null;
+    $this->createdAt = $args['created_at'] ?? date('Y-m-d H:i:s');
   }
 
   static protected function instantiate($record) {
@@ -44,6 +46,37 @@ class Recipe extends DatabaseObject {
     }
 
     return $object;
+  }
+
+  public function create() {
+    $this->validate();
+    if (!empty($this->errors)) {
+      return false;
+    }
+
+    $attributes = $this->sanitized_attributes();
+
+    $sql = "INSERT INTO " . static::$table_name . " (" . join(', ', array_keys($attributes)) . ")";
+    $sql .= " VALUES (" . join(', ', array_fill(0, count($attributes), '?')) . ")";
+
+    if ($stmt = self::$database->prepare($sql)) {
+      $param_types = str_repeat('s', count($attributes));
+      $stmt->bind_param($param_types, ...array_values($attributes));
+
+      $result = $stmt->execute();
+
+      if ($result) {
+        $this->id = self::$database->insert_id;
+      } else {
+        echo "Error executing query: " . $stmt->error;
+      }
+
+      $stmt->close();
+      return $result;
+    } else {
+      echo "Error preparing statement: " . self::$database->error;
+      return false;
+    }
   }
 
   public function get_recipe_photo() {
@@ -152,8 +185,6 @@ class Recipe extends DatabaseObject {
     $sql .= $sortClause;
     $sql .= "LIMIT {$perPage} OFFSET {$offset}";
 
-    
-
     return static::find_by_sql($sql);
   }
   
@@ -179,65 +210,55 @@ class Recipe extends DatabaseObject {
     return (int) $row['total'];
   }
 
-  public static function find_recipe_times($recipeId) {
+  public static function find_recipe_types_by_recipe_id($recipeId) {
     $escapedRecipeId = static::$database->escape_string($recipeId);
 
-    $sql = "SELECT r.recipe_id, pt.time_seconds AS prepTimeSeconds, ct.time_seconds AS cookTimeSeconds ";
-    $sql .= "FROM recipes r LEFT JOIN prep_times pt ON r.recipe_id = pt.recipe_id ";
-    $sql .= "LEFT JOIN cook_times ct ON r.recipe_id = ct.recipe_id ";
-    $sql .= "WHERE r.recipe_id = '{$escapedRecipeId}' LIMIT 1";
+    $sql = "SELECT meal_types, ethnic_types, diet_types ";
+    $sql .= "FROM recipe_categories WHERE recipe_id = '{$escapedRecipeId}'";
 
-    $result = static::find_by_sql($sql);
-
-    if (!empty($result)) {
-      $recipe = $result[0];
-      return [
-        'prepTimeSeconds' => $recipe->prepTimeSeconds,
-        'cookTimeSeconds' => $recipe->cookTimeSeconds
-      ];
-    }
-  
-    return [
-      'prepTimeSeconds' => null,
-      'cookTimeSeconds' => null
-    ];
+    return static::find_by_sql($sql);
+    
   }
 
-  public function is_time_missing() {
-    return ($this->prepTimeSeconds === 0 && $this->cookTimeSeconds === 0);
-  }  
+  public function get_username() {
+    /** @var User $user */
+    $user = User::find_by_id($this->userId);
 
-  public function format_seconds($seconds) {
-    if ($seconds === null) {
-      return "Time not provided.";
-    }
-
-    $seconds = (int)$seconds;
-
-    if ($seconds === 0) {
-      return "Doesn't require";
-    }
-
-    $hours = floor($seconds / 3600);
-    $minutes = floor(($seconds % 3600) / 60);
-
-    return "{$hours}h {$minutes}m";
+    return $user ? $user->username : 'Unknown User';
   }
 
   public function get_prep_time() {
-    return $this->format_seconds($this->prepTimeSeconds);
-  }
-  
-  public function get_cook_time() {
-    return $this->format_seconds($this->cookTimeSeconds);
+    $prep = PrepTime::find_by_recipe_id($this->id);
+
+    if (!$prep || !isset($prep->timeSeconds)) {
+      return "Time not provided";
+    }
+
+    $seconds = (int) $prep->timeSeconds;
+
+    if ($seconds === 0) {
+      return "Time not needed";
+    }
+
+    return $prep->formatted_time();
   }
 
-  public function loadTimes() {
-    $times = self::find_recipe_times($this->id);
-    $this->prepTimeSeconds = $times['prepTimeSeconds'];
-    $this->cookTimeSeconds = $times['cookTimeSeconds'];
+  public function get_cook_time() {
+    $cook = CookTime::find_by_recipe_id($this->id);
+
+    if (!$cook || !isset($cook->timeSeconds)) {
+      return "Time not provided";
+    }
+
+    $seconds = (int) $cook->timeSeconds;
+
+    if ($seconds === 0) {
+      return "Time not needed";
+    }
+
+    return $cook->formatted_time();
   }
- 
+
   public function get_rating_info() {
     $sql = "SELECT AVG(rating) AS average_rating, COUNT(*) ";
     $sql .= "AS total_ratings FROM ratings ";
@@ -250,29 +271,5 @@ class Recipe extends DatabaseObject {
       'average' => $row['average_rating'] ? round($row['average_rating'], 1) : 0,
       'total' => $row['total_ratings'] ?? 0
     ];
-  }
-
-  protected function validate_recipe() {
-    $this->errors = [];
-  
-    if(is_blank($this->recipeName)) {
-      $this->errors[] = "Recipe Name cannot be blank!";
-    } 
-    elseif (!has_length($this->recipeName, ['min' => 2, 'max' => 255])) {
-      $this->errors[] = "Recipe Name must be between 2 and 255 characters.";
-    }
-
-    if(is_blank($this->recipeDescription)) {
-      $this->errors[] = "Description cannot be blank!";
-    } 
-    elseif (!has_length($this->recipeDescription, ['max' => 255])) {
-      $this->errors[] = "Description must be less than 255 characters.";
-    }
-
-    if($this->servings < 1) {
-      $this->errors[] = "Servings must be a number greater than 0.";
-    }
-
-    return $this->errors;
   }
 }

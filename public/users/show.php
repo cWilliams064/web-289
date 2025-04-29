@@ -12,7 +12,7 @@ $viewUser = User::find_by_id($id);
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>Recipes</title>
+    <title><?= $user->username; ?></title>
     <link href="../favicon.ico" rel="icon">
     <link href="../css/styles.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css" />
