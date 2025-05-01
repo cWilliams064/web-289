@@ -822,9 +822,6 @@ main img {
   grid-column: 2;
   grid-row: 2;
   justify-self: center;
-  height: 500px;
-  object-fit: cover;
-  width: 600px;
 }
 
 #show-recipe > section:nth-of-type(2) {
@@ -989,6 +986,13 @@ main img {
   border-radius: 20px;
   margin: 1rem 0;
   width: 70%;
+}
+
+#show-recipe > img,
+#print-recipe-page img {
+  height: 500px;
+  object-fit: cover;
+  width: 600px;
 }
 
 #show-recipe > section:last-of-type p {

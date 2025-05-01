@@ -14,10 +14,6 @@ $recipe = Recipe::find_by_id($recipeId);
 $directions = Direction::find_directions($recipeId);
 $ingredients = Ingredient::find_ingredients($recipeId);
 
-if ($recipe) {
-  $recipe->loadTimes();
-}
-
 ?>
 
 <!DOCTYPE html>
